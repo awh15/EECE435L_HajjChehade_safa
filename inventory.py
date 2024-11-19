@@ -4,8 +4,6 @@ from flask_marshmallow import Marshmallow
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 
-from app import db
-
 from .models.inventory import Inventory, inventory_schema, inventories_schema
 
 app = Flask(__name__)
