@@ -1,15 +1,18 @@
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
-
-from .models.inventory import Inventory, inventory_schema
-from .models.customer import Customer
-from .models.sale import Sale, sale_schema
+from sale.models import Sale, sale_schema
+from shared.db import db, ma, bcrypt
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+bcrypt.init_app(app)
+ma.init_app(app)
+
+CORS(app)
 
 @app.route('/goods', methods=['GET'])
 def get_goods():

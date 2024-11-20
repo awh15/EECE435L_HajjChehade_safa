@@ -1,4 +1,5 @@
-from app import db, ma, datetime
+from shared.db import db, ma
+from datetime import datetime
 
 '''
 • Review ID

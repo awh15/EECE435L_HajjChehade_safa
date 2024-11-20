@@ -1,9 +1,6 @@
 import jwt
 
-from marshmallow_enum import EnumField
-from enum import Enum
 from datetime import datetime
-
 from secret_key import SECRET_KEY
 
 def extract_auth_token(authenticated_request):

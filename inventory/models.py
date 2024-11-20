@@ -1,4 +1,6 @@
-from app import db, ma, Enum, EnumField
+from shared.db import db, ma
+from enum import Enum
+from marshmallow_enum import EnumField
 
 '''
 • Inventory ID

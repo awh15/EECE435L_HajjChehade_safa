@@ -1,4 +1,6 @@
-from app import db, bcrypt, ma, EnumField, Enum
+from shared.db import db, ma, bcrypt
+from enum import Enum
+from marshmallow_enum import EnumField
 
 '''
 • Customer ID

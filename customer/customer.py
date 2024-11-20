@@ -1,18 +1,17 @@
 from flask import Flask, jsonify, abort, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 
-from .models.customer import Customer, customer_schema, customers_schema
+from customer.models import Customer, customer_schema, customers_schema
+from shared.db import db, ma, bcrypt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-ma = Marshmallow(app)
+db.init_app(app)
+bcrypt.init_app(app)
+ma.init_app(app)
+
 CORS(app)
 
 '''
