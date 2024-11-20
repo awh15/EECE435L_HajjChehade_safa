@@ -162,3 +162,28 @@ def delete_inventory(inventory_id):
         return {"Message": "Item Deleted Successfully"}, 200
     except Exception as e:
         return abort(500, "Server Error")
+    
+
+@app.route('/inventory<int:inventory_id>', methods=['GET'])
+def get_inventory(inventory_id):
+    '''
+    Get Inventory by id.
+
+    Requires:
+        inventory_id (int)
+
+    Returns:
+        200: Inventory Schema
+        404: Inventory Not Found
+        500: Server Error
+    '''
+    try:
+        inventory = Inventory.query.filter_by(inventory_id=inventory_id).first()
+
+        if not inventory:
+            return abort(404, "Item not Found")
+        
+        return jsonify(inventory_schema.dump(inventory)), 200
+    except:
+        return abort(500, "Server Error")
+

@@ -302,4 +302,30 @@ def charge(customer_id):
         return jsonify(customer_schema.dump(customer)), 200
     except Exception as e:
         return abort(500, "Server error")
-    
+
+
+@app.route('/customer/<int:customer_id>', methods=['GET'])
+def get_customer(customer_id):
+    '''
+    Get customer by id.
+
+    Requires:
+        customer_id (int)
+
+    Returns:
+        200: Customer Schema
+        404: Customer Not Found
+        500: Server Error
+    '''
+    try:
+        customer = Customer.query.filter_by(customer_id=customer_id).first()
+
+        if not customer:
+            return abort(404, "Customer Not Found")
+        
+        return jsonify(customer_schema.dump(customer)), 200
+    except Exception as e:
+        return abort(500, "Server Error")
+
+
+
