@@ -169,13 +169,51 @@ def get_inventory():
     inventories = Inventory.query.all()
     return jsonify(inventory_schema.dump(inventories)), 200
 
-@app.route('/inventory/<int:inventory_id>', methods=['GET'])
-def get_inventory_by_id(inventory_id):
-    inventory = Inventory.query.filter_by(inventory_id=inventory_id).first()
-    return jsonify(inventory_schema.dump(inventory)), 200
 
-
-@app.route('/inventory/<str:name>', methods=['GET'])
+@app.route('/inventory/<string:name>', methods=['GET'])
 def get_inventory_by_id(name):
-    inventory = Inventory.query.filter_by(name=name).first()
-    return jsonify(inventory_schema.dump(inventory)), 200
+    '''
+    Get Inventory by name.
+
+    Requires:
+        name (string)
+
+    Returns:
+        200: Inventory Schema
+        404: Inventory Not Found
+        500: Server Error
+    '''
+    try:
+        inventory = Inventory.query.filter_by(name=name).first()
+
+        if not inventory:
+            return abort(404, "Item not Found")
+        
+        return jsonify(inventory_schema.dump(inventory)), 200
+    except:
+        return abort(500, "Server Error")
+    
+
+@app.route('/inventory/<int:inventory_id>', methods=['GET'])
+def get_inventory(inventory_id):
+    '''
+    Get Inventory by id.
+
+    Requires:
+        inventory_id (int)
+
+    Returns:
+        200: Inventory Schema
+        404: Inventory Not Found
+        500: Server Error
+    '''
+    try:
+        inventory = Inventory.query.filter_by(inventory_id=inventory_id).first()
+
+        if not inventory:
+            return abort(404, "Item not Found")
+        
+        return jsonify(inventory_schema.dump(inventory)), 200
+    except:
+        return abort(500, "Server Error")
+
