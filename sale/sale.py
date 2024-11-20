@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 
 from sale.models import Sale, sale_schema
 from shared.db import db, ma, bcrypt
+from shared.token import jwt, extract_auth_token, decode_token, CUSTOMER_PATH, INVENTORY_PATH
 
 import requests
 
@@ -18,15 +19,26 @@ CORS(app)
 
 @app.route('/goods', methods=['GET'])
 def get_goods():
-    response = requests.get('http://localhost:5001/inventory')
+    response = requests.get(f'{INVENTORY_PATH}/inventory')
     goods = response.json()
     response_data = [{"name": good.name, "price": good.price} for good in goods]
     return jsonify(response_data)
 
 @app.route('/good/<int:id>', methods=['GET'])
 def get_good(id):
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
     try:
-        response = requests.get(f'http://localhost:5001/inventory/{id}')
+        customer_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+    if customer.status_code == 404:
+        return abort(403, "Unauthorized")
+    try:
+        response = requests.get(f'{INVENTORY_PATH}/inventory/{id}')
         return jsonify(response.json())
     except:
         return jsonify({"message": "Good not found"}), 404
@@ -43,9 +55,9 @@ def make_sale():
         return jsonify({"error": "Missing 'good_name' or 'username'"}), 400
 
     try: 
-        response = requests.get(f'http://localhost:5001/inventory/{good_name}/')
+        response = requests.get(f'{INVENTORY_PATH}/inventory/{good_name}/')
         good = response.json()
-        response = requests.get(f'http://localhost:5000/customer/{username}/')
+        response = requests.get(f'{CUSTOMER_PATH}/customer/{username}/')
         customer = response.json()
     except:
         return jsonify({"message": "Good or User not found"}), 404
