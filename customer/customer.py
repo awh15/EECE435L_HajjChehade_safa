@@ -40,8 +40,8 @@ def get_all_customers():
         abort(500, "Server Error")
 
 
-@app.route('/customer', methods=['GET'])
-def get_customer():
+@app.route('/customer/<string:full_name>', methods=['GET'])
+def get_customer(full_name):
     '''
     Get customer by username.
 
@@ -54,13 +54,6 @@ def get_customer():
         404: Not Found
         500: Server Error
     '''
-    if 'full_name' not in request.json:
-        abort(400, 'Bad Request')
-
-    full_name = request.json['full_name']
-
-    if type(full_name) != str:
-        abort(400, "Bad Request")
 
     try:
         customer = Customer.query.filter_by(full_name=full_name).first()
@@ -125,7 +118,7 @@ def create_customer():
         abort(500, "Server Error")
 
 
-@app.route('/customer:<int:customer_id>', methods=['POST'])
+@app.route('/customer:<int:customer_id>', methods=['PUT'])
 def update_customer(customer_id):
     '''
     Update customer information.

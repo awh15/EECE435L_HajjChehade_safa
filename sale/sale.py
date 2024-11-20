@@ -4,6 +4,8 @@ from flask_cors import CORS
 from sale.models import Sale, sale_schema
 from shared.db import db, ma, bcrypt
 
+import requests
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -16,15 +18,16 @@ CORS(app)
 
 @app.route('/goods', methods=['GET'])
 def get_goods():
-    goods = Inventory.query.all()
+    response = requests.get('http://localhost:5001/inventory')
+    goods = response.json()
     response_data = [{"name": good.name, "price": good.price} for good in goods]
     return jsonify(response_data)
 
 @app.route('/good/<int:id>', methods=['GET'])
 def get_good(id):
     try:
-        good = Inventory.query.filter_by(id=id).first()
-        return jsonify(inventory_schema.dump(good))
+        response = requests.get(f'http://localhost:5001/inventory/{id}')
+        return jsonify(response.json())
     except:
         return jsonify({"message": "Good not found"}), 404
     
@@ -40,23 +43,26 @@ def make_sale():
         return jsonify({"error": "Missing 'good_name' or 'username'"}), 400
 
     try: 
-        good = Inventory.query.filter_by(name=good_name).first()
-        customer = Customer.query.filter_by(username=username).first()
+        response = requests.get(f'http://localhost:5001/inventory/{good_name}/')
+        good = response.json()
+        response = requests.get(f'http://localhost:5000/customer/{username}/')
+        customer = response.json()
     except:
         return jsonify({"message": "Good or User not found"}), 404
     
-    if good.count == 0:
+    if good['count'] == 0:
         return jsonify({"error": f"Item '{good_name}' is out of stock"}), 400
 
-    if customer.wallet < good.price:
+    if customer['balance'] < good['price']:
         return jsonify({"error": f"User '{username}' does not have enough money"}), 400
     
-    good.count -= 1
-    customer.wallet -= good.price
+    count = good["count"]-1
+    balance = customer["balance"]-good["price"]
     
-    db.session.commit()
+    response = requests.put(f'http://localhost:5001/inventory/{good['inventory_id']}/', json={"count": count})
+    response = requests.put(f'http://localhost:5000/deduct/{customer['user_id']}/', json={"amount": balance})
     
-    s = Sale(inventory_id=good.id, customer_id=customer.id, quantity=1, price=good.price)
+    s = Sale(inventory_id=good['inventory_id'], customer_id=customer['user_id'], quantity=1, price=good['price'])
     db.session.add(s)
     db.session.commit()
     

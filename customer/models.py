@@ -45,7 +45,7 @@ class CustomerSchema(ma.Schema):
     marital_status = EnumField(MaritalStatus, by_value=True)
     class Meta:
         model = Customer
-        fields = ('user_id', 'full_name', 'username', 'age', 'address', 'gender', 'marital_status')
+        fields = ('user_id', 'full_name', 'username', 'age', 'address', 'gender', 'marital_status', 'balance')
 
 customer_schema = CustomerSchema()
 customers_schema = CustomerSchema(many=True)

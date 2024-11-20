@@ -68,7 +68,7 @@ def add_inventory():
         return abort(500, "Server Error")
 
 
-@app.route('/inventory/<int:inventory_id>', methods=['POST'])
+@app.route('/inventory/<int:inventory_id>', methods=['PUT'])
 def update_inventory(inventory_id):
     '''
     Update existing inventory.
@@ -162,3 +162,20 @@ def delete_inventory(inventory_id):
         return {"Message": "Item Deleted Successfully"}, 200
     except Exception as e:
         return abort(500, "Server Error")
+    
+    
+@app.route('/inventory', methods=['GET'])
+def get_inventory():
+    inventories = Inventory.query.all()
+    return jsonify(inventory_schema.dump(inventories)), 200
+
+@app.route('/inventory/<int:inventory_id>', methods=['GET'])
+def get_inventory_by_id(inventory_id):
+    inventory = Inventory.query.filter_by(inventory_id=inventory_id).first()
+    return jsonify(inventory_schema.dump(inventory)), 200
+
+
+@app.route('/inventory/<str:name>', methods=['GET'])
+def get_inventory_by_id(name):
+    inventory = Inventory.query.filter_by(name=name).first()
+    return jsonify(inventory_schema.dump(inventory)), 200
