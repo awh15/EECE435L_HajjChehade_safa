@@ -3,8 +3,8 @@ from flask_cors import CORS
 import requests
 
 from shared.db import db, ma, bcrypt
-from app import jwt, extract_auth_token, decode_token
-from app import INVENTORY_PATH, CUSTOMER_PATH
+from shared.token import jwt, extract_auth_token, decode_token
+from shared.token import INVENTORY_PATH, CUSTOMER_PATH
 from models import Favorite, favorite_schema, favorites_schema
 from models import Wishlist, wishlist_schema, wishlists_schema
 
@@ -19,7 +19,7 @@ ma.init_app(app)
 CORS(app)
 
 
-@app.route('/favorite<int:inventory_id>', methods=['POST'])
+@app.route('/favorite/<int:inventory_id>', methods=['POST'])
 def add_favorite(inventory_id):
     '''
     Add Favorite.
@@ -71,7 +71,7 @@ def add_favorite(inventory_id):
 
 
 
-@app.route('/favorite<int:favorite_id>', methods=['DELETE'])
+@app.route('/favorite/<int:favorite_id>', methods=['DELETE'])
 def delete_favorite(favorite_id):
     '''
     Delete Favorite by id.
@@ -114,7 +114,7 @@ def delete_favorite(favorite_id):
         return abort(500, "Server Error")
 
 
-@app.route('/favorite<int:favorite_id>', methods=['GET'])
+@app.route('/favorite/<int:favorite_id>', methods=['GET'])
 def get_favorite(favorite_id):
     '''
     Get Favorite by id.
@@ -303,7 +303,7 @@ def get_wishlists():
         return abort(500, "Server Error")
 
 
-@app.route('/wishlist<int:wishlist_id>', methods=['GET'])
+@app.route('/wishlist/<int:wishlist_id>', methods=['GET'])
 def get_wishlist(wishlist_id):
     '''
     Get wishlist by id.

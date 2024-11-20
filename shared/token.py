@@ -3,6 +3,9 @@ import jwt
 from datetime import datetime
 from secret_key import SECRET_KEY
 
+CUSTOMER_PATH = "http://localhost:5000"
+INVENTORY_PATH = "http://localhost:5001"
+
 def extract_auth_token(authenticated_request):
     '''
     Extract Authentication Token.

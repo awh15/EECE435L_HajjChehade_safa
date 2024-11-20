@@ -171,7 +171,7 @@ def get_inventory():
 
 
 @app.route('/inventory/<string:name>', methods=['GET'])
-def get_inventory_by_id(name):
+def get_inventory_by_name(name):
     '''
     Get Inventory by name.
 
@@ -195,7 +195,7 @@ def get_inventory_by_id(name):
     
 
 @app.route('/inventory/<int:inventory_id>', methods=['GET'])
-def get_inventory(inventory_id):
+def get_inventory_by_id(inventory_id):
     '''
     Get Inventory by id.
 
