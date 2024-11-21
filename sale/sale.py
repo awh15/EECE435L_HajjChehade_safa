@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 from sale.models import Sale, sale_schema
 from shared.db import db, ma, bcrypt
-from shared.token import jwt, extract_auth_token, decode_token, CUSTOMER_PATH, INVENTORY_PATH
+from shared.token import jwt, extract_auth_token, decode_token, CUSTOMER_PATH, INVENTORY_PATH, LOG_PATH
 
 import requests
 
@@ -77,5 +77,7 @@ def make_sale():
     s = Sale(inventory_id=good['inventory_id'], customer_id=customer['user_id'], quantity=1, price=good['price'])
     db.session.add(s)
     db.session.commit()
+    
+    requests.post(f"{LOG_PATH}/add-log", json={"message": f"New sale of item {good_name} to customer {username} for ${good['price']}"})
     
     return jsonify(sale_schema.dump(s)), 200

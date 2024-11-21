@@ -4,7 +4,7 @@ import jwt
 
 from review.models import Review, review_schema, reviews_schema
 from shared.db import db, ma, bcrypt
-from shared.token import extract_auth_token, decode_token, CUSTOMER_PATH, ADMIN_PATH
+from shared.token import extract_auth_token, decode_token, CUSTOMER_PATH, ADMIN_PATH, LOG_PATH
 
 import requests
 
@@ -44,6 +44,8 @@ def submit_review():
     review = Review(customer_id=customer['user_id'], inventory_id=inventory_id, rating=rating, comment=comment)
     db.session.add(review)
     db.session.commit()
+    
+    requests.post(f"{LOG_PATH}/add-log", json={"message": f"Customer {customer['full_name']} added review on item {inventory_id}"})
 
     return jsonify(review_schema.dump(review)), 201
 
@@ -83,12 +85,13 @@ def update_review():
         review.comment = comment
     db.session.commit()
     
+    requests.post(f"{LOG_PATH}/add-log", json={"message": f"Customer {customer['full_name']} updated review on item {review.inventory_id}"})
+    
     return jsonify(review_schema.dump(review)), 200
 
 
 @app.route('/review', methods=['DELETE'])
 def delete_review():
-    # TODO implement functionality for admin when admin is implemented
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -114,11 +117,14 @@ def delete_review():
             abort(403, "Unauthorized")
         db.session.delete(review)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Customer {customer['full_name']} deleted review on item {review.inventory_id}"})
     
         return jsonify({"message": "Review deleted"}), 200
     
     
     elif response2.status_code == 200:
+        admin = response2.json()
         if 'review_id' not in request.json:
             abort(400, "Bad Request")
         review_id = request.json['review_id']
@@ -128,6 +134,8 @@ def delete_review():
         db.session.delete(review)
         db.session.commit()
         
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin['username']} deleted review on item {review.inventory_id} from customer {review.customer_id}"})
+        return jsonify({"message": "Review deleted"}), 200
         
     else:
         return abort(403, "Unauthorized")
@@ -191,10 +199,16 @@ def moderate_reviews():
     if flag:
         review.flag = flag
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {response.json['username']} flagged review {review_id}"})
+        
         return jsonify(review_schema.dump(review)), 200
     
     db.session.delete(review)
     db.session.commit()
+    
+    requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {response.json['username']} deleted review {review_id}"})
+    
     return jsonify({"message": "Review deleted"}), 200
 
 

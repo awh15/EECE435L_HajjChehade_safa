@@ -3,7 +3,10 @@ from flask_cors import CORS
 
 from models import Admin, admin_schema, admins_schema
 from shared.db import db, ma, bcrypt
-from shared.token import create_token
+from shared.token import create_token, LOG_PATH, ADMIN_PATH, extract_auth_token, decode_token
+
+import requests
+import jwt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
@@ -29,6 +32,17 @@ def create_admin():
         400: Bad Request
         500: Server Error
     '''
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    if response.status_code == 404:
+        return abort(403, "Unauthorized")
     if 'username' not in request.json or 'password' not in request.json:
         abort(400, "Bad Request")
 
@@ -36,11 +50,13 @@ def create_admin():
     password = request.json['password']
 
     try:
-        admin = Admin(username=username, password=password)
-        db.session.add(admin)
+        new_admin = Admin(username=username, password=password)
+        db.session.add(new_admin)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin_id} created new admin: {username}"})
 
-        return jsonify(admin_schema.dump(admin)), 200
+        return jsonify(admin_schema.dump(new_admin)), 200
     except Exception as e:
         abort(500, "Server Error")
 

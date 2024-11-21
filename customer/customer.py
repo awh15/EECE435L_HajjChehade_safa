@@ -5,7 +5,7 @@ import requests
 
 from customer.models import Customer, customer_schema, customers_schema
 from shared.db import db, ma, bcrypt
-from shared.token import create_token, ADMIN_PATH, extract_auth_token, decode_token, jwt
+from shared.token import create_token, ADMIN_PATH, extract_auth_token, decode_token, jwt, LOG_PATH
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
@@ -124,6 +124,8 @@ def create_customer():
 
         db.session.add(customer)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"New customer: {full_name}"})
 
         return jsonify(customer_schema.dump(customer)), 200
     except Exception as e:
@@ -194,6 +196,8 @@ def update_customer(customer_id):
             customer.marital_status = marital_status
 
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Updated customer information: {customer.username}"})
 
         return jsonify(customer_schema.dump(customer)), 200
     except Exception as e:
@@ -222,6 +226,8 @@ def delete_customer(customer_id):
 
         db.session.delete(customer)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted customer: {customer.username}"})
 
         return {"Message": "Customer Deleted"}
     except Exception as e:
@@ -265,6 +271,8 @@ def deduct(customer_id):
         customer.balance -= amount
 
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deducted {amount} from customer {customer.username}"})
 
         return jsonify(customer_schema.dump(customer)), 200
     except Exception as e:
@@ -303,6 +311,8 @@ def charge(customer_id):
         customer.balance += amount
 
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Increased wallet balance of customer {customer.username} by {amount}"})
 
         return jsonify(customer_schema.dump(customer)), 200
     except Exception as e:

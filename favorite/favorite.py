@@ -4,7 +4,7 @@ import requests
 
 from shared.db import db, ma, bcrypt
 from shared.token import jwt, extract_auth_token, decode_token
-from shared.token import INVENTORY_PATH, CUSTOMER_PATH
+from shared.token import INVENTORY_PATH, CUSTOMER_PATH, LOG_PATH
 from models import Favorite, favorite_schema, favorites_schema
 from models import Wishlist, wishlist_schema, wishlists_schema
 
@@ -64,6 +64,8 @@ def add_favorite(inventory_id):
 
         db.session.add(favorite)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Added item {inventory.json['name']} as favorite to customer: {customer.json['username']}"})
 
         return jsonify(favorite_schema.dump(favorite)), 200
     except Exception as e:
@@ -108,6 +110,8 @@ def delete_favorite(favorite_id):
 
         db.session.delete(favorite)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted favorite item {favorite_id} to customer: {customer.json['username']}"})
 
         return {"Message": "Favorite Deleted"}, 200
     except Exception as e:
@@ -222,6 +226,7 @@ def add_wishlist(inventory_id):
 
         db.session.add(wishlist)
         db.session.commit()
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Added item {inventory.json['name']} as wishlist to customer: {customer.json['username']}"})
 
         return jsonify(wishlist_schema.dump(wishlist)), 200
     except Exception as e:
@@ -265,6 +270,8 @@ def delete_wishlist(wishlist_id):
         
         db.session.delete(wishlist)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted wishlist item {wishlist_id} of customer: {customer.json['username']}"})
 
         return {"Message": "Wishlist Deleted"}, 200
     except Exception as e:

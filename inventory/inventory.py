@@ -3,6 +3,10 @@ from flask_cors import CORS
 
 from inventory.models import Inventory, inventory_schema
 from shared.db import db, ma, bcrypt
+from shared.token import extract_auth_token, decode_token, ADMIN_PATH, LOG_PATH
+
+import jwt
+import requests
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
@@ -37,6 +41,20 @@ def add_inventory():
         400: Bad Request
         500: Server Error
     '''
+    
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    admin = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    if admin.status_code == 404:
+        return abort(403, "Unauthorized")
+    
+    
     required_fields = ['name', 'category', 'price', 'description', 'count']
 
     for field in required_fields:
@@ -62,6 +80,8 @@ def add_inventory():
 
         db.session.add(inventory)
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json['username']} added new inventory item {name}"})
 
         return jsonify(inventory_schema.dump(inventory)), 200
     except Exception as e:
@@ -89,6 +109,20 @@ def update_inventory(inventory_id):
         400: Bad Request
         500: Server Error
     '''
+    
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    admin = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    if admin.status_code == 404:
+        return abort(403, "Unauthorized")
+    
+    
     name = request.json.get('name')
     category = request.json.get('category')
     price = request.json.get('price')
@@ -132,6 +166,8 @@ def update_inventory(inventory_id):
             inventory.count = count
 
         db.session.commit()
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json['username']} updated inventory item {inventory.name}"})
 
         return jsonify(inventory_schema.dump(inventory)), 200
     except Exception as e:
@@ -151,6 +187,20 @@ def delete_inventory(inventory_id):
         404: Inventory Not Found
         500: Server Error
     '''
+    
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    admin = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    if admin.status_code == 404:
+        return abort(403, "Unauthorized")
+    
+    
     try:
         inventory = Inventory.query.filter_by(inventory_id=inventory_id).first()
 
@@ -158,6 +208,8 @@ def delete_inventory(inventory_id):
             return abort(404, "Item not Found")
         
         db.session.delete(inventory)
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json['username']} deleted inventory item {inventory.name}"})
 
         return {"Message": "Item Deleted Successfully"}, 200
     except Exception as e:
