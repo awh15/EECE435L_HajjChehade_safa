@@ -20,7 +20,7 @@ class Sale(db.Model):
     price = db.Column(db.Float, nullable=False)
 
     def __init__(self, inventory_id, customer_id, quantity, price):
-        date = datetime.now()
+        self.date = datetime.now()
         super(Sale, self).__init__(inventory_id=inventory_id, customer_id=customer_id, quantity=quantity, price=price)
 
 class SaleSchema(ma.Schema):

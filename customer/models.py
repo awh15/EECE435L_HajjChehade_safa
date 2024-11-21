@@ -36,8 +36,8 @@ class Customer(db.Model):
     marital_status = db.Column(db.Enum(MaritalStatus), nullable=False)
 
     def __init__(self, full_name, username, password, age, address, gender, marital_status):
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        balance = 0
+        self.hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        self.balance = 0
         super(Customer, self).__init__(full_name=full_name, username=username, age=age, address=address, gender=gender, marital_status=marital_status)
     
 class CustomerSchema(ma.Schema):
