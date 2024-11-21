@@ -333,10 +333,11 @@ def get_customer(customer_id):
         return abort(500, "Server Error")
 
 
-@app.route('/authenticate/<string:username>', methods=['POST'])
-def authenticate(username):
-    if 'password' not in request.json:
+@app.route('/authenticate', methods=['POST'])
+def authenticate():
+    if 'username' not in request.json or 'password' not in request.json:
         abort(400, "Bad Request")
+    username = request.json['username']
     password = request.json['password']
     
     try:

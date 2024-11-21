@@ -4,7 +4,7 @@ import jwt
 
 from review.models import Review, review_schema, reviews_schema
 from shared.db import db, ma, bcrypt
-from shared.token import extract_auth_token, decode_token, CUSTOMER_PATH
+from shared.token import extract_auth_token, decode_token, CUSTOMER_PATH, ADMIN_PATH
 
 import requests
 
@@ -49,7 +49,7 @@ def submit_review():
 
 
 @app.route('/review', methods=['PUT'])
-def get_reviews():
+def update_review():
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -93,14 +93,124 @@ def delete_review():
     if not token:
         abort(403, "Something went wrong")
     try:
-        customer_id = decode_token(token)
+        id = decode_token(token)
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+    response1 = requests.get(f"{CUSTOMER_PATH}/customer/{id}")
+    response2 = requests.get(f"{ADMIN_PATH}/admin/{id}")
+    
+    if response1.status_code == 200:
+        customer = response1.json()
+    
+        if 'review_id' not in request.json:
+            abort(400, "Bad Request")
+            
+        review_id = request.json['review_id']
+        review = Review.query.filter_by(review_id=review_id).first()
+        if not review:
+            abort(404, "Review not found")
+        if review.customer_id != customer['user_id']:
+            abort(403, "Unauthorized")
+        db.session.delete(review)
+        db.session.commit()
+    
+        return jsonify({"message": "Review deleted"}), 200
+    
+    
+    elif response2.status_code == 200:
+        if 'review_id' not in request.json:
+            abort(400, "Bad Request")
+        review_id = request.json['review_id']
+        review = Review.query.filter_by(review_id=review_id).first()
+        if not review:
+            abort(404, "Review not found")
+        db.session.delete(review)
+        db.session.commit()
+        
+        
+    else:
+        return abort(403, "Unauthorized")
+
+
+
+@app.route('/product-reviews/<inventory_id>', methods=['GET'])
+def get_product_reviews(inventory_id):
+    try:
+        reviews = Review.query.filter_by(inventory_id=inventory_id).all()
+        return jsonify(reviews_schema.dump(reviews)), 200
+    except:
+        return abort(500, "Server Error")
+
+
+@app.route('/customer-reviews', methods=['GET'])
+def get_customer_reviews():
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
-    customer = response.json()
+    
+    if 'customer_id' not in request.json:
+        abort(400, "Bad Request")
+        
+    customer_id = request.json['customer_id']
+    reviews = Review.query.filter_by(customer_id=customer_id).all()
+    return jsonify(reviews_schema.dump(reviews)), 200
+
+
+@app.route('/moderate-reviews', methods=['POST'])
+def moderate_reviews():
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    if response.status_code == 404:
+        return abort(403, "Unauthorized")
+    
+    if 'review_id' not in request.json or 'flag' not in request.json:
+        abort(400, "Bad Request")
+        
+    review_id = request.json['review_id']
+    flag = request.json['flag']
+    review = Review.query.filter_by(review_id=review_id).first()
+    if not review:
+        abort(404, "Review not found")
+
+    if flag:
+        review.flag = flag
+        db.session.commit()
+        return jsonify(review_schema.dump(review)), 200
+    
+    db.session.delete(review)
+    db.session.commit()
+    return jsonify({"message": "Review deleted"}), 200
+
+
+@app.route('/review-details', methods=['GET'])
+def get_review_details():
+    token = extract_auth_token(request)
+    if not token:
+        abort(403, "Something went wrong")
+    try:
+        admin_id = decode_token(token)
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        abort(403, "Something went wrong")
+
+    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    if response.status_code == 404:
+        return abort(403, "Unauthorized")
     
     if 'review_id' not in request.json:
         abort(400, "Bad Request")
@@ -109,34 +219,4 @@ def delete_review():
     review = Review.query.filter_by(review_id=review_id).first()
     if not review:
         abort(404, "Review not found")
-    if review.customer_id != customer['user_id']:
-        abort(403, "Unauthorized")
-    db.session.delete(review)
-    db.session.commit()
-    
-    return jsonify({"message": "Review deleted"}), 200
-
-
-
-@app.route('/product-reviews/<inventory_id>', methods=['GET'])
-def get_product_reviews(inventory_id):
-    reviews = Review.query.filter_by(inventory_id=inventory_id).all()
-    return jsonify(reviews_schema.dump(reviews)), 200
-
-
-@app.route('/customer-reviews', methods=['GET'])
-def get_customer_reviews():
-    # TODO implement when admin is implemented 
-    pass
-
-
-@app.route('/moderate-reviews', methods=['POST'])
-def moderate_reviews():
-    # TODO implement when admin is implemented 
-    pass
-
-
-@app.route('/review-details', methods=['GET'])
-def get_review_details():
-    # TODO implement when admin is implemented 
-    pass
+    return jsonify(review_schema.dump(review)), 200

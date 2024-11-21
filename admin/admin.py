@@ -45,7 +45,7 @@ def create_admin():
         abort(500, "Server Error")
 
 
-@app.route('/authenticate/', methods=['POST'])
+@app.route('/authenticate', methods=['POST'])
 def authenticate():
     '''
     Authenticate admin.
