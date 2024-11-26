@@ -2,7 +2,7 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 import jwt
 
-from review.models import Review, review_schema, reviews_schema
+from review_service.models import Review, review_schema, reviews_schema
 from shared.db import db, ma, bcrypt
 from shared.token import extract_auth_token, decode_token, CUSTOMER_PATH, ADMIN_PATH, LOG_PATH
 

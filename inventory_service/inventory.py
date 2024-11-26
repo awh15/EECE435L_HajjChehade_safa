@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 
-from inventory.models import Inventory, inventory_schema
+from inventory_service.models import Inventory, inventory_schema
 from shared.db import db, ma, bcrypt
 from shared.token import extract_auth_token, decode_token, ADMIN_PATH, LOG_PATH
 
@@ -269,3 +269,6 @@ def get_inventory_by_id(inventory_id):
     except:
         return abort(500, "Server Error")
 
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5200)

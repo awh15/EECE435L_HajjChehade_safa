@@ -1,0 +1,5 @@
+Flask==3.1.0
+Flask_Cors==4.0.0
+marshmallow_enum==1.5.1
+Requests==2.32.3
+shared==0.0.30

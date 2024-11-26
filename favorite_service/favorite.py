@@ -5,8 +5,8 @@ import requests
 from shared.db import db, ma, bcrypt
 from shared.token import jwt, extract_auth_token, decode_token
 from shared.token import INVENTORY_PATH, CUSTOMER_PATH, LOG_PATH
-from models import Favorite, favorite_schema, favorites_schema
-from models import Wishlist, wishlist_schema, wishlists_schema
+from favorite_service.models import Favorite, favorite_schema, favorites_schema
+from favorite_service.models import Wishlist, wishlist_schema, wishlists_schema
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///lab-project.db"
@@ -347,4 +347,5 @@ def get_wishlist(wishlist_id):
         return abort(500, "Server Error")
     
 
-    
+if __name__ == '__main__':
+    app.run(debug=True, port=5150)

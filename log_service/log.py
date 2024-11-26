@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 
-from models import Log, logs_schema, log_schema
+from log_service.models import Log, logs_schema, log_schema
 from shared.db import db, ma, bcrypt
 
 app = Flask(__name__)

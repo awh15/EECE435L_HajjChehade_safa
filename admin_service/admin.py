@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 
-from models import Admin, admin_schema, admins_schema
+from admin_service.models import Admin, admin_schema, admins_schema
 from shared.db import db, ma, bcrypt
 from shared.token import create_token, LOG_PATH, ADMIN_PATH, extract_auth_token, decode_token
 
@@ -120,3 +120,6 @@ def get_admin(admin_id):
         return jsonify(admin_schema.dump(admin)), 200
     except Exception as e:
         abort(500, "Server Error")
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5050)

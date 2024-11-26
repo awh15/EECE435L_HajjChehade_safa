@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 
-from sale.models import Sale, sale_schema
+from sale_service.models import Sale, sale_schema
 from shared.db import db, ma, bcrypt
 from shared.token import jwt, extract_auth_token, decode_token, CUSTOMER_PATH, INVENTORY_PATH, LOG_PATH
 
@@ -71,8 +71,8 @@ def make_sale():
     count = good["count"]-1
     balance = customer["balance"]-good["price"]
     
-    response = requests.put(f'http://localhost:5001/inventory/{good['inventory_id']}/', json={"count": count})
-    response = requests.put(f'http://localhost:5000/deduct/{customer['user_id']}/', json={"amount": balance})
+    response = requests.put(f'http://localhost:5001/inventory/{good["inventory_id"]}/', json={"count": count})
+    response = requests.put(f'http://localhost:5000/deduct/{customer["user_id"]}/', json={"amount": balance})
     
     s = Sale(inventory_id=good['inventory_id'], customer_id=customer['user_id'], quantity=1, price=good['price'])
     db.session.add(s)

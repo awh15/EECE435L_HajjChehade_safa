@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 import requests
 
-from customer.models import Customer, customer_schema, customers_schema
+from customer_service.models import Customer, customer_schema, customers_schema
 from shared.db import db, ma, bcrypt
 from shared.token import create_token, ADMIN_PATH, extract_auth_token, decode_token, jwt, LOG_PATH
 
@@ -53,7 +53,7 @@ def get_all_customers():
 
 
 @app.route('/customer/<string:full_name>', methods=['GET'])
-def get_customer(full_name):
+def get_customer_by_name(full_name):
     '''
     Get customer by username.
 
@@ -320,7 +320,7 @@ def charge(customer_id):
 
 
 @app.route('/customer/<int:customer_id>', methods=['GET'])
-def get_customer(customer_id):
+def get_customer_by_id(customer_id):
     '''
     Get customer by id.
 
@@ -365,3 +365,6 @@ def authenticate():
     except Exception as e:
         return abort(500, "Server Error")    
 
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5100)
