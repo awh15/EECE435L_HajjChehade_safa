@@ -8,7 +8,7 @@ from shared.db import db, ma, bcrypt
 
 class Favorite(db.Model):
     favorite_id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.user_id'), nullable=False)
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.inventory_id'), nullable=False)
     def __init__(self, customer_id, inventory_id):
         super(Favorite, self).__init__(customer_id=customer_id, inventory_id=inventory_id) 

@@ -1,5 +1,4 @@
-from customer.customer import app, db
-from customer.models import Customer
+from admin_service.admin import app, db
 
 with app.app_context():
     db.create_all()  # Ensures tables are created if not already

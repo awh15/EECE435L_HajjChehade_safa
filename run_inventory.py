@@ -1,5 +1,4 @@
-from inventory.inventory import app, db
-from inventory.models import Inventory
+from inventory_service.inventory import app, db
 
 with app.app_context():
     db.create_all()  # Ensures tables are created if not already

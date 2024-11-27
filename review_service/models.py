@@ -13,8 +13,8 @@ from datetime import datetime
 class Review(db.Model):
     review_id = db.Column(db.Integer, primary_key=True)
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.inventory_id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
-    date = db.Column(db.Datetime, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.user_id'), nullable=False)
+    date = db.Column(db.String(30), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.String(80))
     flag = db.Column(db.Boolean, nullable=True)

@@ -81,3 +81,7 @@ def make_sale():
     requests.post(f"{LOG_PATH}/add-log", json={"message": f"New sale of item {good_name} to customer {username} for ${good['price']}"})
     
     return jsonify(sale_schema.dump(s)), 200
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5350)

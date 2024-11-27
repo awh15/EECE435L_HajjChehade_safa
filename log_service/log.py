@@ -28,3 +28,7 @@ def add_log():
     db.session.add(log)
     db.session.commit()
     return jsonify(log_schema.dump(log)), 200
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5250)

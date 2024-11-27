@@ -1,5 +1,4 @@
-from review.review import app, db
-from review.models import Review
+from review_service.review import app, db
 
 with app.app_context():
     db.create_all()  # Ensures tables are created if not already

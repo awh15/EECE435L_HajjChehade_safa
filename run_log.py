@@ -1,5 +1,4 @@
-from log.log import app, db
-from log.models import Log
+from log_service.log import app, db
 
 with app.app_context():
     db.create_all()  # Ensures tables are created if not already

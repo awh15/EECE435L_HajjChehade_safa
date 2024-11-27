@@ -1,5 +1,4 @@
-from favorite.favorite import app, db
-from favorite.models import Customer
+from favorite_service.favorite import app, db
 
 with app.app_context():
     db.create_all()  # Ensures tables are created if not already

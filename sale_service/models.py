@@ -14,8 +14,8 @@ from datetime import datetime
 class Sale(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.inventory_id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
-    date = db.Column(db.Datetime, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.user_id'), nullable=False)
+    date = db.Column(db.String(30), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
 

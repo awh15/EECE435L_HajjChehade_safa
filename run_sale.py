@@ -1,5 +1,4 @@
-from sale.sale import app, db
-from sale.models import Sale
+from sale_service.sale import app, db
 
 with app.app_context():
     db.create_all()  # Ensures tables are created if not already

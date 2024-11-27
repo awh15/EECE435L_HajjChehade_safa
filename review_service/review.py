@@ -234,3 +234,8 @@ def get_review_details():
     if not review:
         abort(404, "Review not found")
     return jsonify(review_schema.dump(review)), 200
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5300)
