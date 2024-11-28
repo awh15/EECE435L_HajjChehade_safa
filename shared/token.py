@@ -38,7 +38,7 @@ def create_token(user_id):
     """
     
     payload = {
-        'iat': datetime.datetime.utcnow(),
+        'iat': datetime.utcnow(),
         'id': user_id
     }
     return jwt.encode(

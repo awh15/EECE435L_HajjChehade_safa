@@ -40,7 +40,7 @@ def create_admin():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    response = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
     if 'username' not in request.json or 'password' not in request.json:
@@ -98,7 +98,7 @@ def authenticate():
         return abort(500, "Server Error")
     
 
-@app.route('/admin/<int:admin_id>', methods=['GET'])
+@app.route('/admin:<int:admin_id>', methods=['GET'])
 def get_admin(admin_id):
     '''
     Get admin by id.

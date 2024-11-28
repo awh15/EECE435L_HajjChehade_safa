@@ -24,8 +24,18 @@ def get_goods():
     response_data = [{"name": good.name, "price": good.price} for good in goods]
     return jsonify(response_data)
 
-@app.route('/good/<int:id>', methods=['GET'])
+@app.route('/good:<int:id>', methods=['GET'])
 def get_good(id):
+    try:
+        response = requests.get(f'{INVENTORY_PATH}/inventory:{id}')
+        return jsonify(response.json())
+    except:
+        return jsonify({"message": "Good not found"}), 404
+    
+    
+@app.route('/sale', methods=['POST'])
+def make_sale():
+    
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -34,30 +44,27 @@ def get_good(id):
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
-    if customer.status_code == 404:
-        return abort(403, "Unauthorized")
     try:
-        response = requests.get(f'{INVENTORY_PATH}/inventory/{id}')
-        return jsonify(response.json())
-    except:
-        return jsonify({"message": "Good not found"}), 404
-    
-    
-@app.route('/sale', methods=['POST'])
-def make_sale():
-    data = request.get_json()
-    good_name = data.get('good_name')
-    username = data.get('username')
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
-    # Validate inputs
-    if not good_name or not username:
-        return jsonify({"error": "Missing 'good_name' or 'username'"}), 400
+        if customer.status_code == 404:
+            return abort(401, "Unauthorized")
+        
+        if customer.status_code == 500:
+            return abort(500, "Server Error")
+    except:
+        abort(500, "Server Error")
+    data = request.get_json()
+    if 'good_name' not in data:
+        abort(400, "Bad request")
+    good_name = data.get('good_name')
+    username = customer.json()['full_name']
+
 
     try: 
-        response = requests.get(f'{INVENTORY_PATH}/inventory/{good_name}/')
+        response = requests.get(f'{INVENTORY_PATH}/inventory:{good_name}/')
         good = response.json()
-        response = requests.get(f'{CUSTOMER_PATH}/customer/{username}/')
+        response = requests.get(f'{CUSTOMER_PATH}/customer:{username}/')
         customer = response.json()
     except:
         return jsonify({"message": "Good or User not found"}), 404
@@ -71,8 +78,8 @@ def make_sale():
     count = good["count"]-1
     balance = customer["balance"]-good["price"]
     
-    response = requests.put(f'http://localhost:5001/inventory/{good["inventory_id"]}/', json={"count": count})
-    response = requests.put(f'http://localhost:5000/deduct/{customer["user_id"]}/', json={"amount": balance})
+    response = requests.put(f'http://localhost:5001/inventory:{good["inventory_id"]}/', json={"count": count})
+    response = requests.put(f'http://localhost:5000/deduct', json={"amount": balance}, headers={"Authorization": f"Bearer {token}"})
     
     s = Sale(inventory_id=good['inventory_id'], customer_id=customer['user_id'], quantity=1, price=good['price'])
     db.session.add(s)

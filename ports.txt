@@ -1,0 +1,7 @@
+admin: 5005
+customer: 5000
+favorite: 5004
+inventory: 5001
+log: 5006
+review: 5002
+sale: 5003

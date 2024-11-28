@@ -19,7 +19,7 @@ ma.init_app(app)
 CORS(app)
 
 
-@app.route('/favorite/<int:inventory_id>', methods=['POST'])
+@app.route('/favorite:<int:inventory_id>', methods=['POST'])
 def add_favorite(inventory_id):
     '''
     Add Favorite.
@@ -45,12 +45,12 @@ def add_favorite(inventory_id):
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
         
-        inventory = requests.get(f"{INVENTORY_PATH}/inventory/{inventory_id}")
+        inventory = requests.get(f"{INVENTORY_PATH}/inventory:{inventory_id}")
 
         if inventory.status_code == 404:
             return abort(404, "Item Not Found")
@@ -73,7 +73,7 @@ def add_favorite(inventory_id):
 
 
 
-@app.route('/favorite/<int:favorite_id>', methods=['DELETE'])
+@app.route('/favorite:<int:favorite_id>', methods=['DELETE'])
 def delete_favorite(favorite_id):
     '''
     Delete Favorite by id.
@@ -98,7 +98,7 @@ def delete_favorite(favorite_id):
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
@@ -118,7 +118,7 @@ def delete_favorite(favorite_id):
         return abort(500, "Server Error")
 
 
-@app.route('/favorite/<int:favorite_id>', methods=['GET'])
+@app.route('/favorite:<int:favorite_id>', methods=['GET'])
 def get_favorite(favorite_id):
     '''
     Get Favorite by id.
@@ -140,7 +140,7 @@ def get_favorite(favorite_id):
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
@@ -175,7 +175,7 @@ def get_favorites():
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
@@ -187,7 +187,7 @@ def get_favorites():
         return abort(500, "Server Error")
 
 
-@app.route('/wishlist/<int:inventory_id>', methods=['POST'])
+@app.route('/wishlist:<int:inventory_id>', methods=['POST'])
 def add_wishlist(inventory_id):
     '''
     Add Wishlist.
@@ -212,12 +212,12 @@ def add_wishlist(inventory_id):
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
         
-        inventory = requests.get(f"{INVENTORY_PATH}/inventory/{inventory_id}")
+        inventory = requests.get(f"{INVENTORY_PATH}/inventory:{inventory_id}")
 
         if inventory.status_code == 404:
             return abort(404, "Item Not Found")
@@ -233,7 +233,7 @@ def add_wishlist(inventory_id):
         return abort(500, "Server Error")
 
 
-@app.route('/wishlist/<int:wishlist_id>', methods=['DELETE'])
+@app.route('/wishlist:<int:wishlist_id>', methods=['DELETE'])
 def delete_wishlist(wishlist_id):
     '''
     Delete Wishlist.
@@ -258,7 +258,7 @@ def delete_wishlist(wishlist_id):
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
@@ -298,7 +298,7 @@ def get_wishlists():
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")
@@ -310,7 +310,7 @@ def get_wishlists():
         return abort(500, "Server Error")
 
 
-@app.route('/wishlist/<int:wishlist_id>', methods=['GET'])
+@app.route('/wishlist:<int:wishlist_id>', methods=['GET'])
 def get_wishlist(wishlist_id):
     '''
     Get wishlist by id.
@@ -332,7 +332,7 @@ def get_wishlist(wishlist_id):
         abort(403, "Something went wrong")
 
     try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
         if customer.status_code == 404:
             return abort(401, "Unauthorized")

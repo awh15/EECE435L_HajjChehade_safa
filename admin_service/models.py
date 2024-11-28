@@ -11,7 +11,7 @@ class Admin(db.Model):
     username = db.Column(db.String(80), nullable=False, unique=True)
     hashed_password = db.Column(db.String(128), nullable=False)
     def __init__(self, username, password):
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        self.hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         super(Admin, self).__init__(username=username)
 
 

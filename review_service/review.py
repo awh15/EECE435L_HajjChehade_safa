@@ -29,7 +29,7 @@ def submit_review():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+    response = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
     customer = response.json()
@@ -60,7 +60,7 @@ def update_review():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{CUSTOMER_PATH}/customer/{customer_id}")
+    response = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
     customer = response.json()
@@ -100,8 +100,8 @@ def delete_review():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response1 = requests.get(f"{CUSTOMER_PATH}/customer/{id}")
-    response2 = requests.get(f"{ADMIN_PATH}/admin/{id}")
+    response1 = requests.get(f"{CUSTOMER_PATH}/customer:{id}")
+    response2 = requests.get(f"{ADMIN_PATH}/admin:{id}")
     
     if response1.status_code == 200:
         customer = response1.json()
@@ -142,7 +142,7 @@ def delete_review():
 
 
 
-@app.route('/product-reviews/<inventory_id>', methods=['GET'])
+@app.route('/product-reviews:<inventory_id>', methods=['GET'])
 def get_product_reviews(inventory_id):
     try:
         reviews = Review.query.filter_by(inventory_id=inventory_id).all()
@@ -161,7 +161,7 @@ def get_customer_reviews():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    response = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
     
@@ -183,7 +183,7 @@ def moderate_reviews():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    response = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
     
@@ -222,7 +222,7 @@ def get_review_details():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    response = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    response = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if response.status_code == 404:
         return abort(403, "Unauthorized")
     

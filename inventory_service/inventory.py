@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, abort, request
 from flask_cors import CORS
 
-from inventory_service.models import Inventory, inventory_schema
+from inventory_service.models import Inventory, inventory_schema, inventories_schema
 from shared.db import db, ma, bcrypt
 from shared.token import extract_auth_token, decode_token, ADMIN_PATH, LOG_PATH
 
@@ -50,7 +50,7 @@ def add_inventory():
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    admin = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    admin = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if admin.status_code == 404:
         return abort(403, "Unauthorized")
     
@@ -88,7 +88,7 @@ def add_inventory():
         return abort(500, "Server Error")
 
 
-@app.route('/inventory/<int:inventory_id>', methods=['PUT'])
+@app.route('/inventory:<int:inventory_id>', methods=['PUT'])
 def update_inventory(inventory_id):
     '''
     Update existing inventory.
@@ -118,7 +118,7 @@ def update_inventory(inventory_id):
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    admin = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    admin = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if admin.status_code == 404:
         return abort(403, "Unauthorized")
     
@@ -174,7 +174,7 @@ def update_inventory(inventory_id):
         return abort(500, "Server Error")
 
 
-@app.route('/inventory/<int:inventory_id>', methods=['DELETE'])
+@app.route('/inventory:<int:inventory_id>', methods=['DELETE'])
 def delete_inventory(inventory_id):
     '''
     Delete existing inventory.
@@ -196,7 +196,7 @@ def delete_inventory(inventory_id):
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    admin = requests.get(f"{ADMIN_PATH}/admin/{admin_id}")
+    admin = requests.get(f"{ADMIN_PATH}/admin:{admin_id}")
     if admin.status_code == 404:
         return abort(403, "Unauthorized")
     
@@ -219,10 +219,10 @@ def delete_inventory(inventory_id):
 @app.route('/inventory', methods=['GET'])
 def get_inventory():
     inventories = Inventory.query.all()
-    return jsonify(inventory_schema.dump(inventories)), 200
+    return jsonify(inventories_schema.dump(inventories)), 200
 
 
-@app.route('/inventory/<string:name>', methods=['GET'])
+@app.route('/inventory:<string:name>', methods=['GET'])
 def get_inventory_by_name(name):
     '''
     Get Inventory by name.
@@ -246,7 +246,7 @@ def get_inventory_by_name(name):
         return abort(500, "Server Error")
     
 
-@app.route('/inventory/<int:inventory_id>', methods=['GET'])
+@app.route('/inventory:<int:inventory_id>', methods=['GET'])
 def get_inventory_by_id(inventory_id):
     '''
     Get Inventory by id.
