@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>favorite_service.favorite &mdash; 435L Project 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            435L Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">435L Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">favorite_service.favorite</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for favorite_service.favorite</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">abort</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">shared.db</span> <span class="kn">import</span> <span class="n">db</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">bcrypt</span>
+<span class="kn">from</span> <span class="nn">shared.token</span> <span class="kn">import</span> <span class="n">jwt</span><span class="p">,</span> <span class="n">extract_auth_token</span><span class="p">,</span> <span class="n">decode_token</span>
+<span class="kn">from</span> <span class="nn">shared.token</span> <span class="kn">import</span> <span class="n">INVENTORY_PATH</span><span class="p">,</span> <span class="n">CUSTOMER_PATH</span><span class="p">,</span> <span class="n">LOG_PATH</span>
+<span class="kn">from</span> <span class="nn">favorite_service.models</span> <span class="kn">import</span> <span class="n">Favorite</span><span class="p">,</span> <span class="n">favorite_schema</span><span class="p">,</span> <span class="n">favorites_schema</span>
+<span class="kn">from</span> <span class="nn">favorite_service.models</span> <span class="kn">import</span> <span class="n">Wishlist</span><span class="p">,</span> <span class="n">wishlist_schema</span><span class="p">,</span> <span class="n">wishlists_schema</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SQLALCHEMY_DATABASE_URI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///lab-project.db&quot;</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SQLALCHEMY_TRACK_MODIFICATIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<span class="n">bcrypt</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="n">CORS</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="add_favorite">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.add_favorite">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/favorite:&lt;int:inventory_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">add_favorite</span><span class="p">(</span><span class="n">inventory_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add an item to the favorites list.</span>
+
+<span class="sd">    :param inventory_id: The ID of the inventory item to add as a favorite</span>
+<span class="sd">    :type inventory_id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 400 if item is already a favorite, 401 if unauthorized, 403 for invalid token, 404 if item or customer not found, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the added favorite</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">inventory</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">INVENTORY_PATH</span><span class="si">}</span><span class="s2">/inventory:</span><span class="si">{</span><span class="n">inventory_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inventory</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Item Not Found&quot;</span><span class="p">)</span>
+        
+        <span class="n">favorite</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">customer_id</span><span class="o">=</span><span class="n">customer_id</span><span class="p">,</span> <span class="n">inventory_id</span><span class="o">=</span><span class="n">inventory_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">favorite</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Item Already Favorite&quot;</span><span class="p">)</span>
+
+        <span class="n">favorite</span> <span class="o">=</span> <span class="n">Favorite</span><span class="p">(</span><span class="n">customer_id</span><span class="o">=</span><span class="n">customer_id</span><span class="p">,</span> <span class="n">inventory_id</span><span class="o">=</span><span class="n">inventory_id</span><span class="p">)</span>
+
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">favorite</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        
+        <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LOG_PATH</span><span class="si">}</span><span class="s2">/add-log&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Added item </span><span class="si">{</span><span class="n">inventory</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> as favorite to customer: </span><span class="si">{</span><span class="n">customer</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">favorite_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">favorite</span><span class="p">)),</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_favorite">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.delete_favorite">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/favorite:&lt;int:favorite_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delete_favorite</span><span class="p">(</span><span class="n">favorite_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a favorite item by ID.</span>
+
+<span class="sd">    :param favorite_id: The ID of the favorite item to delete</span>
+<span class="sd">    :type favorite_id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if favorite not found, 500 for server errors</span>
+<span class="sd">    :return: Success message confirming deletion</span>
+<span class="sd">    :rtype: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">favorite</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">favorite_id</span><span class="o">=</span><span class="n">favorite_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">favorite</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Favorite Not Found&quot;</span><span class="p">)</span>
+
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">favorite</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        
+        <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LOG_PATH</span><span class="si">}</span><span class="s2">/add-log&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Deleted favorite item </span><span class="si">{</span><span class="n">favorite_id</span><span class="si">}</span><span class="s2"> to customer: </span><span class="si">{</span><span class="n">customer</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Message&quot;</span><span class="p">:</span> <span class="s2">&quot;Favorite Deleted&quot;</span><span class="p">},</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_favorite">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.get_favorite">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/favorite:&lt;int:favorite_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_favorite</span><span class="p">(</span><span class="n">favorite_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a favorite item by ID.</span>
+
+<span class="sd">    :param favorite_id: The ID of the favorite item to retrieve</span>
+<span class="sd">    :type favorite_id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if favorite not found, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the favorite item</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+    
+    <span class="n">favorite</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">favorite_id</span><span class="o">=</span><span class="n">favorite_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">favorite</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Favorite Not Found&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">favorite</span><span class="o">.</span><span class="n">customer_id</span> <span class="o">!=</span> <span class="n">customer_id</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">favorite_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">favorite</span><span class="p">)),</span> <span class="mi">200</span></div>
+
+
+
+<div class="viewcode-block" id="get_favorites">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.get_favorites">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/favorites&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_favorites</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all favorite items for the authenticated customer.</span>
+
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the customer&#39;s favorites</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">favorites</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">customer_id</span><span class="o">=</span><span class="n">customer_id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">favorites_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">favorites</span><span class="p">)),</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="add_wishlist">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.add_wishlist">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/wishlist:&lt;int:inventory_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">add_wishlist</span><span class="p">(</span><span class="n">inventory_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add an item to the wishlist.</span>
+
+<span class="sd">    :param inventory_id: The ID of the inventory item to add to the wishlist</span>
+<span class="sd">    :type inventory_id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 401 if unauthorized, 403 for invalid token, 404 if item or customer not found, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the added wishlist item</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">inventory</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">INVENTORY_PATH</span><span class="si">}</span><span class="s2">/inventory:</span><span class="si">{</span><span class="n">inventory_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inventory</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Item Not Found&quot;</span><span class="p">)</span>
+        
+        <span class="n">wishlist</span> <span class="o">=</span> <span class="n">Wishlist</span><span class="p">(</span><span class="n">customer_id</span><span class="o">=</span><span class="n">customer_id</span><span class="p">,</span> <span class="n">inventory_id</span><span class="o">=</span><span class="n">inventory_id</span><span class="p">)</span>
+
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">wishlist</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LOG_PATH</span><span class="si">}</span><span class="s2">/add-log&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Added item </span><span class="si">{</span><span class="n">inventory</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> as wishlist to customer: </span><span class="si">{</span><span class="n">customer</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">wishlist_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">wishlist</span><span class="p">)),</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="delete_wishlist">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.delete_wishlist">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/wishlist:&lt;int:wishlist_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delete_wishlist</span><span class="p">(</span><span class="n">wishlist_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a wishlist item by ID.</span>
+
+<span class="sd">    :param wishlist_id: The ID of the wishlist item to delete</span>
+<span class="sd">    :type wishlist_id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if wishlist not found, 500 for server errors</span>
+<span class="sd">    :return: Success message confirming deletion</span>
+<span class="sd">    :rtype: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">wishlist</span> <span class="o">=</span> <span class="n">Wishlist</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">wishlist_id</span><span class="o">=</span><span class="n">wishlist_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wishlist</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Wishlist Not Found&quot;</span><span class="p">)</span>
+        
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">wishlist</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        
+        <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LOG_PATH</span><span class="si">}</span><span class="s2">/add-log&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Deleted wishlist item </span><span class="si">{</span><span class="n">wishlist_id</span><span class="si">}</span><span class="s2"> of customer: </span><span class="si">{</span><span class="n">customer</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Message&quot;</span><span class="p">:</span> <span class="s2">&quot;Wishlist Deleted&quot;</span><span class="p">},</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_wishlists">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.get_wishlists">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/wishlists&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_wishlists</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all wishlist items for the authenticated customer.</span>
+
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the customer&#39;s wishlists</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">wishlists</span> <span class="o">=</span> <span class="n">Wishlist</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">customer_id</span><span class="o">=</span><span class="n">customer_id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">wishlists_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">wishlists</span><span class="p">)),</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_wishlist">
+<a class="viewcode-back" href="../../favorite_service.html#favorite_service.favorite.get_wishlist">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/wishlist:&lt;int:wishlist_id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_wishlist</span><span class="p">(</span><span class="n">wishlist_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a wishlist item by ID.</span>
+
+<span class="sd">    :param wishlist_id: The ID of the wishlist item to retrieve</span>
+<span class="sd">    :type wishlist_id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if wishlist not found, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the wishlist item</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="n">wishlist</span> <span class="o">=</span> <span class="n">Wishlist</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">wishlist_id</span><span class="o">=</span><span class="n">wishlist_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wishlist</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;Wishlist Not Found&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">wishlist_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">wishlist</span><span class="p">)),</span> <span class="mi">200</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span></div>
+
+    
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5150</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ali Hajj Chehade, Tamer Safa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

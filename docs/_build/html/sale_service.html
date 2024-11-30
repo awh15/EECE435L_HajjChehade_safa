@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sale_service package &mdash; 435L Project 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            435L Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">sale_service package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-sale_service.models">sale_service.models module</a><ul>
+<li><a class="reference internal" href="#sale_service.models.Sale"><code class="docutils literal notranslate"><span class="pre">Sale</span></code></a><ul>
+<li><a class="reference internal" href="#sale_service.models.Sale.customer_id"><code class="docutils literal notranslate"><span class="pre">Sale.customer_id</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.models.Sale.date"><code class="docutils literal notranslate"><span class="pre">Sale.date</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.models.Sale.inventory_id"><code class="docutils literal notranslate"><span class="pre">Sale.inventory_id</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.models.Sale.price"><code class="docutils literal notranslate"><span class="pre">Sale.price</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.models.Sale.quantity"><code class="docutils literal notranslate"><span class="pre">Sale.quantity</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.models.Sale.sale_id"><code class="docutils literal notranslate"><span class="pre">Sale.sale_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sale_service.models.SaleSchema"><code class="docutils literal notranslate"><span class="pre">SaleSchema</span></code></a><ul>
+<li><a class="reference internal" href="#sale_service.models.SaleSchema.Meta"><code class="docutils literal notranslate"><span class="pre">SaleSchema.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#sale_service.models.SaleSchema.Meta.fields"><code class="docutils literal notranslate"><span class="pre">SaleSchema.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.models.SaleSchema.Meta.model"><code class="docutils literal notranslate"><span class="pre">SaleSchema.Meta.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sale_service.models.SaleSchema.opts"><code class="docutils literal notranslate"><span class="pre">SaleSchema.opts</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sale_service.sale">sale_service.sale module</a><ul>
+<li><a class="reference internal" href="#sale_service.sale.get_good"><code class="docutils literal notranslate"><span class="pre">get_good()</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.sale.get_goods"><code class="docutils literal notranslate"><span class="pre">get_goods()</span></code></a></li>
+<li><a class="reference internal" href="#sale_service.sale.make_sale"><code class="docutils literal notranslate"><span class="pre">make_sale()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sale_service">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">435L Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">sale_service package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sale_service.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sale-service-package">
+<h1>sale_service package<a class="headerlink" href="#sale-service-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-sale_service.models">
+<span id="sale-service-models-module"></span><h2>sale_service.models module<a class="headerlink" href="#module-sale_service.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sale_service.models.Sale">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sale_service.models.</span></span><span class="sig-name descname"><span class="pre">Sale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inventory_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customer_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sale_service/models.html#Sale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sale_service.models.Sale" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>The Sale object represents a sale transaction in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item sold</p></li>
+<li><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer who purchased the item</p></li>
+<li><p><strong>quantity</strong> (<em>int</em>) – The quantity of the item sold</p></li>
+<li><p><strong>price</strong> (<em>float</em>) – The price of the item at the time of sale</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>sale_id</strong> (<em>int</em>) – The unique identifier for the sale</p></li>
+<li><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item sold</p></li>
+<li><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer who purchased the item</p></li>
+<li><p><strong>date</strong> (<em>str</em>) – The date when the sale occurred</p></li>
+<li><p><strong>quantity</strong> (<em>int</em>) – The quantity of the item sold</p></li>
+<li><p><strong>price</strong> (<em>float</em>) – The price of the item at the time of sale</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.Sale.customer_id">
+<span class="sig-name descname"><span class="pre">customer_id</span></span><a class="headerlink" href="#sale_service.models.Sale.customer_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.Sale.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#sale_service.models.Sale.date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.Sale.inventory_id">
+<span class="sig-name descname"><span class="pre">inventory_id</span></span><a class="headerlink" href="#sale_service.models.Sale.inventory_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.Sale.price">
+<span class="sig-name descname"><span class="pre">price</span></span><a class="headerlink" href="#sale_service.models.Sale.price" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.Sale.quantity">
+<span class="sig-name descname"><span class="pre">quantity</span></span><a class="headerlink" href="#sale_service.models.Sale.quantity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.Sale.sale_id">
+<span class="sig-name descname"><span class="pre">sale_id</span></span><a class="headerlink" href="#sale_service.models.Sale.sale_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sale_service.models.SaleSchema">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sale_service.models.</span></span><span class="sig-name descname"><span class="pre">SaleSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">many</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dump_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sale_service/models.html#SaleSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sale_service.models.SaleSchema" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Schema</span></code></p>
+<p>The SaleSchema object is used for serializing and deserializing sale data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Meta.fields</strong> (<em>tuple</em>) – The fields included in the schema (‘sale_id’, ‘inventory_id’, ‘customer_id’, ‘quantity’, ‘price’, ‘date’)</p></li>
+<li><p><strong>Meta.model</strong> (<a class="reference internal" href="#sale_service.models.Sale" title="sale_service.models.Sale"><em>Sale</em></a>) – The associated model for the schema (Sale)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="sale_service.models.SaleSchema.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/sale_service/models.html#SaleSchema.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sale_service.models.SaleSchema.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.SaleSchema.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('sale_id',</span> <span class="pre">'inventory_id',</span> <span class="pre">'customer_id',</span> <span class="pre">'quantity',</span> <span class="pre">'price',</span> <span class="pre">'date')</span></em><a class="headerlink" href="#sale_service.models.SaleSchema.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.SaleSchema.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#sale_service.models.SaleSchema.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#sale_service.models.Sale" title="sale_service.models.Sale"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sale</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sale_service.models.SaleSchema.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SchemaOpts</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;marshmallow.schema.SchemaOpts</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#sale_service.models.SaleSchema.opts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sale_service.sale">
+<span id="sale-service-sale-module"></span><h2>sale_service.sale module<a class="headerlink" href="#module-sale_service.sale" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sale_service.sale.get_good">
+<span class="sig-prename descclassname"><span class="pre">sale_service.sale.</span></span><span class="sig-name descname"><span class="pre">get_good</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sale_service/sale.html#get_good"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sale_service.sale.get_good" title="Link to this definition"></a></dt>
+<dd><p>Retrieve details of a specific good by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – The ID of the good to retrieve</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 404 if the good is not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the good details</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sale_service.sale.get_goods">
+<span class="sig-prename descclassname"><span class="pre">sale_service.sale.</span></span><span class="sig-name descname"><span class="pre">get_goods</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sale_service/sale.html#get_goods"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sale_service.sale.get_goods" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a list of goods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>werkzeug.exceptions.HTTPException</strong> – 500 for server errors</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON representation of available goods with their names and prices</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sale_service.sale.make_sale">
+<span class="sig-prename descclassname"><span class="pre">sale_service.sale.</span></span><span class="sig-name descname"><span class="pre">make_sale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sale_service/sale.html#make_sale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sale_service.sale.make_sale" title="Link to this definition"></a></dt>
+<dd><p>Make a sale for a specific good.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>good_name</strong> (<em>str</em>) – The name of the good to be sold</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 403 for unauthorized access, 404 if the good or customer is not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the sale details</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sale_service">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sale_service" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ali Hajj Chehade, Tamer Safa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

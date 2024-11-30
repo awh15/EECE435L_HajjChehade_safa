@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>customer_service package &mdash; 435L Project 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            435L Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">customer_service package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-customer_service.customer">customer_service.customer module</a><ul>
+<li><a class="reference internal" href="#customer_service.customer.authenticate"><code class="docutils literal notranslate"><span class="pre">authenticate()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.charge"><code class="docutils literal notranslate"><span class="pre">charge()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.create_customer"><code class="docutils literal notranslate"><span class="pre">create_customer()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.deduct"><code class="docutils literal notranslate"><span class="pre">deduct()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.delete_customer"><code class="docutils literal notranslate"><span class="pre">delete_customer()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.get_all_customers"><code class="docutils literal notranslate"><span class="pre">get_all_customers()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.get_customer_by_id"><code class="docutils literal notranslate"><span class="pre">get_customer_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.get_customer_by_name"><code class="docutils literal notranslate"><span class="pre">get_customer_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.customer.update_customer"><code class="docutils literal notranslate"><span class="pre">update_customer()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-customer_service.models">customer_service.models module</a><ul>
+<li><a class="reference internal" href="#customer_service.models.Customer"><code class="docutils literal notranslate"><span class="pre">Customer</span></code></a><ul>
+<li><a class="reference internal" href="#customer_service.models.Customer.address"><code class="docutils literal notranslate"><span class="pre">Customer.address</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.age"><code class="docutils literal notranslate"><span class="pre">Customer.age</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.balance"><code class="docutils literal notranslate"><span class="pre">Customer.balance</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.full_name"><code class="docutils literal notranslate"><span class="pre">Customer.full_name</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.gender"><code class="docutils literal notranslate"><span class="pre">Customer.gender</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.hashed_password"><code class="docutils literal notranslate"><span class="pre">Customer.hashed_password</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.marital_status"><code class="docutils literal notranslate"><span class="pre">Customer.marital_status</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.user_id"><code class="docutils literal notranslate"><span class="pre">Customer.user_id</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Customer.username"><code class="docutils literal notranslate"><span class="pre">Customer.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customer_service.models.CustomerSchema"><code class="docutils literal notranslate"><span class="pre">CustomerSchema</span></code></a><ul>
+<li><a class="reference internal" href="#customer_service.models.CustomerSchema.Meta"><code class="docutils literal notranslate"><span class="pre">CustomerSchema.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#customer_service.models.CustomerSchema.Meta.fields"><code class="docutils literal notranslate"><span class="pre">CustomerSchema.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.CustomerSchema.Meta.model"><code class="docutils literal notranslate"><span class="pre">CustomerSchema.Meta.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customer_service.models.CustomerSchema.opts"><code class="docutils literal notranslate"><span class="pre">CustomerSchema.opts</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customer_service.models.Gender"><code class="docutils literal notranslate"><span class="pre">Gender</span></code></a><ul>
+<li><a class="reference internal" href="#customer_service.models.Gender.FEMALE"><code class="docutils literal notranslate"><span class="pre">Gender.FEMALE</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.Gender.MALE"><code class="docutils literal notranslate"><span class="pre">Gender.MALE</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#customer_service.models.MaritalStatus"><code class="docutils literal notranslate"><span class="pre">MaritalStatus</span></code></a><ul>
+<li><a class="reference internal" href="#customer_service.models.MaritalStatus.DIVORCED"><code class="docutils literal notranslate"><span class="pre">MaritalStatus.DIVORCED</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.MaritalStatus.MARRIED"><code class="docutils literal notranslate"><span class="pre">MaritalStatus.MARRIED</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.MaritalStatus.SINGLE"><code class="docutils literal notranslate"><span class="pre">MaritalStatus.SINGLE</span></code></a></li>
+<li><a class="reference internal" href="#customer_service.models.MaritalStatus.WIDOWED"><code class="docutils literal notranslate"><span class="pre">MaritalStatus.WIDOWED</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-customer_service">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">435L Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">customer_service package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/customer_service.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="customer-service-package">
+<h1>customer_service package<a class="headerlink" href="#customer-service-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-customer_service.customer">
+<span id="customer-service-customer-module"></span><h2>customer_service.customer module<a class="headerlink" href="#module-customer_service.customer" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.authenticate">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">authenticate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#authenticate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.authenticate" title="Link to this definition"></a></dt>
+<dd><p>Authenticate a customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>flask.Request</em>) – HTTP request containing ‘username’ and ‘password’</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 401 if unauthorized, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON containing the authentication token</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.charge">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">charge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.charge" title="Link to this definition"></a></dt>
+<dd><p>Charge an amount to a customer’s balance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>flask.Request</em>) – HTTP request containing the amount to charge</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 404 if customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the updated customer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.create_customer">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">create_customer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#create_customer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.create_customer" title="Link to this definition"></a></dt>
+<dd><p>Create a new customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>flask.Request</em>) – HTTP request containing required customer fields</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the created customer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.deduct">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">deduct</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#deduct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.deduct" title="Link to this definition"></a></dt>
+<dd><p>Deduct an amount from a customer’s balance.</p>
+<p>Customer’s balance must be greater than the amount to deduct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>flask.Request</em>) – HTTP request containing the amount to deduct</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 404 if customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the updated customer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.delete_customer">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">delete_customer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#delete_customer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.delete_customer" title="Link to this definition"></a></dt>
+<dd><p>Delete a customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>flask.Request</em>) – HTTP request containing the customer ID</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 403 for unauthorized access, 404 if customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Success message indicating deletion</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.get_all_customers">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">get_all_customers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#get_all_customers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.get_all_customers" title="Link to this definition"></a></dt>
+<dd><p>Get all customers.</p>
+<p>Must be an admin to access this route.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 if invalid token, 500 for server errors</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON representation of all customers</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.get_customer_by_id">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">get_customer_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">customer_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#get_customer_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.get_customer_by_id" title="Link to this definition"></a></dt>
+<dd><p>Get a customer by their ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 404 if customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the customer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.get_customer_by_name">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">get_customer_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#get_customer_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.get_customer_by_name" title="Link to this definition"></a></dt>
+<dd><p>Get a customer by their full name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>full_name</strong> (<em>str</em>) – The full name of the customer</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 404 if customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the customer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="customer_service.customer.update_customer">
+<span class="sig-prename descclassname"><span class="pre">customer_service.customer.</span></span><span class="sig-name descname"><span class="pre">update_customer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/customer.html#update_customer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.customer.update_customer" title="Link to this definition"></a></dt>
+<dd><p>Update an existing customer’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>flask.Request</em>) – HTTP request containing optional customer fields to update</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 403 for invalid token, 404 if customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the updated customer</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-customer_service.models">
+<span id="customer-service-models-module"></span><h2>customer_service.models module<a class="headerlink" href="#module-customer_service.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="customer_service.models.Customer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">customer_service.models.</span></span><span class="sig-name descname"><span class="pre">Customer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">age</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marital_status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/models.html#Customer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.models.Customer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>The Customer object represents a customer in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>full_name</strong> (<em>str</em>) – The full name of the customer</p></li>
+<li><p><strong>username</strong> (<em>str</em>) – The username of the customer (must be unique)</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – The plain-text password for the customer (hashed for storage)</p></li>
+<li><p><strong>age</strong> (<em>int</em>) – The age of the customer</p></li>
+<li><p><strong>address</strong> (<em>str</em>) – The address of the customer</p></li>
+<li><p><strong>gender</strong> (<a class="reference internal" href="#customer_service.models.Gender" title="customer_service.models.Gender"><em>Gender</em></a>) – The gender of the customer</p></li>
+<li><p><strong>marital_status</strong> (<a class="reference internal" href="#customer_service.models.MaritalStatus" title="customer_service.models.MaritalStatus"><em>MaritalStatus</em></a>) – The marital status of the customer</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>user_id</strong> (<em>int</em>) – The unique identifier for the customer</p></li>
+<li><p><strong>balance</strong> (<em>float</em>) – The current balance of the customer (default is 0)</p></li>
+<li><p><strong>hashed_password</strong> (<em>str</em>) – The hashed password of the customer</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.address">
+<span class="sig-name descname"><span class="pre">address</span></span><a class="headerlink" href="#customer_service.models.Customer.address" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.age">
+<span class="sig-name descname"><span class="pre">age</span></span><a class="headerlink" href="#customer_service.models.Customer.age" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.balance">
+<span class="sig-name descname"><span class="pre">balance</span></span><a class="headerlink" href="#customer_service.models.Customer.balance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.full_name">
+<span class="sig-name descname"><span class="pre">full_name</span></span><a class="headerlink" href="#customer_service.models.Customer.full_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.gender">
+<span class="sig-name descname"><span class="pre">gender</span></span><a class="headerlink" href="#customer_service.models.Customer.gender" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.hashed_password">
+<span class="sig-name descname"><span class="pre">hashed_password</span></span><a class="headerlink" href="#customer_service.models.Customer.hashed_password" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.marital_status">
+<span class="sig-name descname"><span class="pre">marital_status</span></span><a class="headerlink" href="#customer_service.models.Customer.marital_status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#customer_service.models.Customer.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Customer.username">
+<span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#customer_service.models.Customer.username" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="customer_service.models.CustomerSchema">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">customer_service.models.</span></span><span class="sig-name descname"><span class="pre">CustomerSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">many</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dump_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/models.html#CustomerSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.models.CustomerSchema" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Schema</span></code></p>
+<p>The CustomerSchema object is used for serializing and deserializing customer data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gender</strong> (<a class="reference internal" href="#customer_service.models.Gender" title="customer_service.models.Gender"><em>Gender</em></a>) – The gender of the customer serialized using EnumField</p></li>
+<li><p><strong>marital_status</strong> (<a class="reference internal" href="#customer_service.models.MaritalStatus" title="customer_service.models.MaritalStatus"><em>MaritalStatus</em></a>) – The marital status of the customer serialized using EnumField</p></li>
+<li><p><strong>Meta.fields</strong> (<em>tuple</em>) – The fields included in the schema</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="customer_service.models.CustomerSchema.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/customer_service/models.html#CustomerSchema.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.models.CustomerSchema.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.CustomerSchema.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('user_id',</span> <span class="pre">'full_name',</span> <span class="pre">'username',</span> <span class="pre">'age',</span> <span class="pre">'address',</span> <span class="pre">'gender',</span> <span class="pre">'marital_status',</span> <span class="pre">'balance')</span></em><a class="headerlink" href="#customer_service.models.CustomerSchema.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.CustomerSchema.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#customer_service.models.CustomerSchema.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#customer_service.models.Customer" title="customer_service.models.Customer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Customer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.CustomerSchema.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SchemaOpts</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;marshmallow.schema.SchemaOpts</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#customer_service.models.CustomerSchema.opts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="customer_service.models.Gender">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">customer_service.models.</span></span><span class="sig-name descname"><span class="pre">Gender</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/models.html#Gender"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.models.Gender" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>The Gender enumeration represents the gender of a customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>MALE</strong> (<em>str</em>) – Represents male gender</p></li>
+<li><p><strong>FEMALE</strong> (<em>str</em>) – Represents female gender</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Gender.FEMALE">
+<span class="sig-name descname"><span class="pre">FEMALE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'female'</span></em><a class="headerlink" href="#customer_service.models.Gender.FEMALE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.Gender.MALE">
+<span class="sig-name descname"><span class="pre">MALE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'male'</span></em><a class="headerlink" href="#customer_service.models.Gender.MALE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="customer_service.models.MaritalStatus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">customer_service.models.</span></span><span class="sig-name descname"><span class="pre">MaritalStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/customer_service/models.html#MaritalStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#customer_service.models.MaritalStatus" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>The MaritalStatus enumeration represents the marital status of a customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SINGLE</strong> (<em>str</em>) – Indicates the customer is single</p></li>
+<li><p><strong>MARRIED</strong> (<em>str</em>) – Indicates the customer is married</p></li>
+<li><p><strong>DIVORCED</strong> (<em>str</em>) – Indicates the customer is divorced</p></li>
+<li><p><strong>WIDOWED</strong> (<em>str</em>) – Indicates the customer is widowed</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.MaritalStatus.DIVORCED">
+<span class="sig-name descname"><span class="pre">DIVORCED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'divorced'</span></em><a class="headerlink" href="#customer_service.models.MaritalStatus.DIVORCED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.MaritalStatus.MARRIED">
+<span class="sig-name descname"><span class="pre">MARRIED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'married'</span></em><a class="headerlink" href="#customer_service.models.MaritalStatus.MARRIED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.MaritalStatus.SINGLE">
+<span class="sig-name descname"><span class="pre">SINGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'single'</span></em><a class="headerlink" href="#customer_service.models.MaritalStatus.SINGLE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="customer_service.models.MaritalStatus.WIDOWED">
+<span class="sig-name descname"><span class="pre">WIDOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'widowed'</span></em><a class="headerlink" href="#customer_service.models.MaritalStatus.WIDOWED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-customer_service">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-customer_service" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ali Hajj Chehade, Tamer Safa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

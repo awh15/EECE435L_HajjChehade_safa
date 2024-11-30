@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>favorite_service package &mdash; 435L Project 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            435L Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">favorite_service package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-favorite_service.favorite">favorite_service.favorite module</a><ul>
+<li><a class="reference internal" href="#favorite_service.favorite.add_favorite"><code class="docutils literal notranslate"><span class="pre">add_favorite()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.add_wishlist"><code class="docutils literal notranslate"><span class="pre">add_wishlist()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.delete_favorite"><code class="docutils literal notranslate"><span class="pre">delete_favorite()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.delete_wishlist"><code class="docutils literal notranslate"><span class="pre">delete_wishlist()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.get_favorite"><code class="docutils literal notranslate"><span class="pre">get_favorite()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.get_favorites"><code class="docutils literal notranslate"><span class="pre">get_favorites()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.get_wishlist"><code class="docutils literal notranslate"><span class="pre">get_wishlist()</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.favorite.get_wishlists"><code class="docutils literal notranslate"><span class="pre">get_wishlists()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-favorite_service.models">favorite_service.models module</a><ul>
+<li><a class="reference internal" href="#favorite_service.models.Favorite"><code class="docutils literal notranslate"><span class="pre">Favorite</span></code></a><ul>
+<li><a class="reference internal" href="#favorite_service.models.Favorite.customer_id"><code class="docutils literal notranslate"><span class="pre">Favorite.customer_id</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.models.Favorite.favorite_id"><code class="docutils literal notranslate"><span class="pre">Favorite.favorite_id</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.models.Favorite.inventory_id"><code class="docutils literal notranslate"><span class="pre">Favorite.inventory_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#favorite_service.models.FavoriteSchema"><code class="docutils literal notranslate"><span class="pre">FavoriteSchema</span></code></a><ul>
+<li><a class="reference internal" href="#favorite_service.models.FavoriteSchema.Meta"><code class="docutils literal notranslate"><span class="pre">FavoriteSchema.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#favorite_service.models.FavoriteSchema.Meta.fields"><code class="docutils literal notranslate"><span class="pre">FavoriteSchema.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.models.FavoriteSchema.Meta.model"><code class="docutils literal notranslate"><span class="pre">FavoriteSchema.Meta.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#favorite_service.models.FavoriteSchema.opts"><code class="docutils literal notranslate"><span class="pre">FavoriteSchema.opts</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#favorite_service.models.Wishlist"><code class="docutils literal notranslate"><span class="pre">Wishlist</span></code></a><ul>
+<li><a class="reference internal" href="#favorite_service.models.Wishlist.customer_id"><code class="docutils literal notranslate"><span class="pre">Wishlist.customer_id</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.models.Wishlist.inventory_id"><code class="docutils literal notranslate"><span class="pre">Wishlist.inventory_id</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.models.Wishlist.wishlist_id"><code class="docutils literal notranslate"><span class="pre">Wishlist.wishlist_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#favorite_service.models.WishlistSchema"><code class="docutils literal notranslate"><span class="pre">WishlistSchema</span></code></a><ul>
+<li><a class="reference internal" href="#favorite_service.models.WishlistSchema.Meta"><code class="docutils literal notranslate"><span class="pre">WishlistSchema.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#favorite_service.models.WishlistSchema.Meta.fields"><code class="docutils literal notranslate"><span class="pre">WishlistSchema.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#favorite_service.models.WishlistSchema.Meta.model"><code class="docutils literal notranslate"><span class="pre">WishlistSchema.Meta.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#favorite_service.models.WishlistSchema.opts"><code class="docutils literal notranslate"><span class="pre">WishlistSchema.opts</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-favorite_service">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">435L Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">favorite_service package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/favorite_service.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="favorite-service-package">
+<h1>favorite_service package<a class="headerlink" href="#favorite-service-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-favorite_service.favorite">
+<span id="favorite-service-favorite-module"></span><h2>favorite_service.favorite module<a class="headerlink" href="#module-favorite_service.favorite" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.add_favorite">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">add_favorite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inventory_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#add_favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.add_favorite" title="Link to this definition"></a></dt>
+<dd><p>Add an item to the favorites list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item to add as a favorite</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 if item is already a favorite, 401 if unauthorized, 403 for invalid token, 404 if item or customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the added favorite</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.add_wishlist">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">add_wishlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inventory_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#add_wishlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.add_wishlist" title="Link to this definition"></a></dt>
+<dd><p>Add an item to the wishlist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item to add to the wishlist</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 400 for bad requests, 401 if unauthorized, 403 for invalid token, 404 if item or customer not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the added wishlist item</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.delete_favorite">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">delete_favorite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">favorite_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#delete_favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.delete_favorite" title="Link to this definition"></a></dt>
+<dd><p>Delete a favorite item by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>favorite_id</strong> (<em>int</em>) – The ID of the favorite item to delete</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 for invalid token, 404 if favorite not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Success message confirming deletion</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.delete_wishlist">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">delete_wishlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wishlist_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#delete_wishlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.delete_wishlist" title="Link to this definition"></a></dt>
+<dd><p>Delete a wishlist item by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wishlist_id</strong> (<em>int</em>) – The ID of the wishlist item to delete</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 for invalid token, 404 if wishlist not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Success message confirming deletion</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.get_favorite">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">get_favorite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">favorite_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#get_favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.get_favorite" title="Link to this definition"></a></dt>
+<dd><p>Get a favorite item by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>favorite_id</strong> (<em>int</em>) – The ID of the favorite item to retrieve</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 for invalid token, 404 if favorite not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the favorite item</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.get_favorites">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">get_favorites</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#get_favorites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.get_favorites" title="Link to this definition"></a></dt>
+<dd><p>Get all favorite items for the authenticated customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 for invalid token, 500 for server errors</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON representation of the customer’s favorites</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.get_wishlist">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">get_wishlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wishlist_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#get_wishlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.get_wishlist" title="Link to this definition"></a></dt>
+<dd><p>Get a wishlist item by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wishlist_id</strong> (<em>int</em>) – The ID of the wishlist item to retrieve</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 for invalid token, 404 if wishlist not found, 500 for server errors</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON representation of the wishlist item</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="favorite_service.favorite.get_wishlists">
+<span class="sig-prename descclassname"><span class="pre">favorite_service.favorite.</span></span><span class="sig-name descname"><span class="pre">get_wishlists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/favorite.html#get_wishlists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.favorite.get_wishlists" title="Link to this definition"></a></dt>
+<dd><p>Get all wishlist items for the authenticated customer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>werkzeug.exceptions.HTTPException</strong> – 401 if unauthorized, 403 for invalid token, 500 for server errors</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON representation of the customer’s wishlists</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>flask.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-favorite_service.models">
+<span id="favorite-service-models-module"></span><h2>favorite_service.models module<a class="headerlink" href="#module-favorite_service.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="favorite_service.models.Favorite">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">favorite_service.models.</span></span><span class="sig-name descname"><span class="pre">Favorite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">customer_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inventory_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/models.html#Favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.models.Favorite" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>The Favorite object represents a customer’s favorite item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer who marked the item as a favorite</p></li>
+<li><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item marked as a favorite</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>favorite_id</strong> (<em>int</em>) – The unique identifier for the favorite record</p></li>
+<li><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer who marked the item as a favorite</p></li>
+<li><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item marked as a favorite</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.Favorite.customer_id">
+<span class="sig-name descname"><span class="pre">customer_id</span></span><a class="headerlink" href="#favorite_service.models.Favorite.customer_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.Favorite.favorite_id">
+<span class="sig-name descname"><span class="pre">favorite_id</span></span><a class="headerlink" href="#favorite_service.models.Favorite.favorite_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.Favorite.inventory_id">
+<span class="sig-name descname"><span class="pre">inventory_id</span></span><a class="headerlink" href="#favorite_service.models.Favorite.inventory_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="favorite_service.models.FavoriteSchema">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">favorite_service.models.</span></span><span class="sig-name descname"><span class="pre">FavoriteSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">many</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dump_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/models.html#FavoriteSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.models.FavoriteSchema" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Schema</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="favorite_service.models.FavoriteSchema.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/favorite_service/models.html#FavoriteSchema.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.models.FavoriteSchema.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.FavoriteSchema.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('favorite_id',</span> <span class="pre">'customer_id',</span> <span class="pre">'inventory_id')</span></em><a class="headerlink" href="#favorite_service.models.FavoriteSchema.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.FavoriteSchema.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#favorite_service.models.FavoriteSchema.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#favorite_service.models.Favorite" title="favorite_service.models.Favorite"><code class="xref py py-class docutils literal notranslate"><span class="pre">Favorite</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.FavoriteSchema.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SchemaOpts</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;marshmallow.schema.SchemaOpts</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#favorite_service.models.FavoriteSchema.opts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="favorite_service.models.Wishlist">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">favorite_service.models.</span></span><span class="sig-name descname"><span class="pre">Wishlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">customer_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inventory_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/models.html#Wishlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.models.Wishlist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>The Wishlist object represents an item added to a customer’s wishlist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer who added the item to their wishlist</p></li>
+<li><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item added to the wishlist</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>wishlist_id</strong> (<em>int</em>) – The unique identifier for the wishlist record</p></li>
+<li><p><strong>customer_id</strong> (<em>int</em>) – The ID of the customer who added the item to their wishlist</p></li>
+<li><p><strong>inventory_id</strong> (<em>int</em>) – The ID of the inventory item added to the wishlist</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.Wishlist.customer_id">
+<span class="sig-name descname"><span class="pre">customer_id</span></span><a class="headerlink" href="#favorite_service.models.Wishlist.customer_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.Wishlist.inventory_id">
+<span class="sig-name descname"><span class="pre">inventory_id</span></span><a class="headerlink" href="#favorite_service.models.Wishlist.inventory_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.Wishlist.wishlist_id">
+<span class="sig-name descname"><span class="pre">wishlist_id</span></span><a class="headerlink" href="#favorite_service.models.Wishlist.wishlist_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="favorite_service.models.WishlistSchema">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">favorite_service.models.</span></span><span class="sig-name descname"><span class="pre">WishlistSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">many</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dump_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.StrSequenceOrSet</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">types.StrSequenceOrSet</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/favorite_service/models.html#WishlistSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.models.WishlistSchema" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Schema</span></code></p>
+<p>The WishlistSchema object is used for serializing and deserializing wishlist data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Meta.fields</strong> (<em>tuple</em>) – The fields included in the schema (‘wishlist_id’, ‘customer_id’, ‘inventory_id’)</p></li>
+<li><p><strong>Meta.model</strong> (<a class="reference internal" href="#favorite_service.models.Wishlist" title="favorite_service.models.Wishlist"><em>Wishlist</em></a>) – The associated model for the schema (Wishlist)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="favorite_service.models.WishlistSchema.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/favorite_service/models.html#WishlistSchema.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#favorite_service.models.WishlistSchema.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.WishlistSchema.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('wishlist_id',</span> <span class="pre">'customer_id',</span> <span class="pre">'inventory_id')</span></em><a class="headerlink" href="#favorite_service.models.WishlistSchema.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.WishlistSchema.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#favorite_service.models.WishlistSchema.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#favorite_service.models.Wishlist" title="favorite_service.models.Wishlist"><code class="xref py py-class docutils literal notranslate"><span class="pre">Wishlist</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="favorite_service.models.WishlistSchema.opts">
+<span class="sig-name descname"><span class="pre">opts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SchemaOpts</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;marshmallow.schema.SchemaOpts</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#favorite_service.models.WishlistSchema.opts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-favorite_service">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-favorite_service" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ali Hajj Chehade, Tamer Safa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

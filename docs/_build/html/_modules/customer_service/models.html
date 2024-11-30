@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>customer_service.models &mdash; 435L Project 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            435L Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">435L Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">customer_service.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for customer_service.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">shared.db</span> <span class="kn">import</span> <span class="n">db</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">bcrypt</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">marshmallow_enum</span> <span class="kn">import</span> <span class="n">EnumField</span>
+
+
+<div class="viewcode-block" id="Gender">
+<a class="viewcode-back" href="../../customer_service.html#customer_service.models.Gender">[docs]</a>
+<span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Gender enumeration represents the gender of a customer.</span>
+
+<span class="sd">    :cvar MALE: Represents male gender</span>
+<span class="sd">    :vartype MALE: str</span>
+<span class="sd">    :cvar FEMALE: Represents female gender</span>
+<span class="sd">    :vartype FEMALE: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">MALE</span> <span class="o">=</span> <span class="s2">&quot;male&quot;</span>
+    <span class="n">FEMALE</span> <span class="o">=</span> <span class="s2">&quot;female&quot;</span></div>
+
+    
+<div class="viewcode-block" id="MaritalStatus">
+<a class="viewcode-back" href="../../customer_service.html#customer_service.models.MaritalStatus">[docs]</a>
+<span class="k">class</span> <span class="nc">MaritalStatus</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The MaritalStatus enumeration represents the marital status of a customer.</span>
+
+<span class="sd">    :cvar SINGLE: Indicates the customer is single</span>
+<span class="sd">    :vartype SINGLE: str</span>
+<span class="sd">    :cvar MARRIED: Indicates the customer is married</span>
+<span class="sd">    :vartype MARRIED: str</span>
+<span class="sd">    :cvar DIVORCED: Indicates the customer is divorced</span>
+<span class="sd">    :vartype DIVORCED: str</span>
+<span class="sd">    :cvar WIDOWED: Indicates the customer is widowed</span>
+<span class="sd">    :vartype WIDOWED: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SINGLE</span> <span class="o">=</span> <span class="s2">&quot;single&quot;</span>
+    <span class="n">MARRIED</span> <span class="o">=</span> <span class="s2">&quot;married&quot;</span>
+    <span class="n">DIVORCED</span> <span class="o">=</span> <span class="s2">&quot;divorced&quot;</span>
+    <span class="n">WIDOWED</span> <span class="o">=</span> <span class="s2">&quot;widowed&quot;</span></div>
+
+
+<div class="viewcode-block" id="Customer">
+<a class="viewcode-back" href="../../customer_service.html#customer_service.models.Customer">[docs]</a>
+<span class="k">class</span> <span class="nc">Customer</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Customer object represents a customer in the system.</span>
+
+<span class="sd">    :param full_name: The full name of the customer</span>
+<span class="sd">    :type full_name: str</span>
+<span class="sd">    :param username: The username of the customer (must be unique)</span>
+<span class="sd">    :type username: str</span>
+<span class="sd">    :param password: The plain-text password for the customer (hashed for storage)</span>
+<span class="sd">    :type password: str</span>
+<span class="sd">    :param age: The age of the customer</span>
+<span class="sd">    :type age: int</span>
+<span class="sd">    :param address: The address of the customer</span>
+<span class="sd">    :type address: str</span>
+<span class="sd">    :param gender: The gender of the customer</span>
+<span class="sd">    :type gender: Gender</span>
+<span class="sd">    :param marital_status: The marital status of the customer</span>
+<span class="sd">    :type marital_status: MaritalStatus</span>
+<span class="sd">    :ivar user_id: The unique identifier for the customer</span>
+<span class="sd">    :vartype user_id: int</span>
+<span class="sd">    :ivar balance: The current balance of the customer (default is 0)</span>
+<span class="sd">    :vartype balance: float</span>
+<span class="sd">    :ivar hashed_password: The hashed password of the customer</span>
+<span class="sd">    :vartype hashed_password: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">full_name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">hashed_password</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">balance</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Float</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gender</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="n">Gender</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">marital_status</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="n">MaritalStatus</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full_name</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">gender</span><span class="p">,</span> <span class="n">marital_status</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hashed_password</span> <span class="o">=</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">generate_password_hash</span><span class="p">(</span><span class="n">password</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balance</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Customer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">full_name</span><span class="o">=</span><span class="n">full_name</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="n">age</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">address</span><span class="p">,</span> <span class="n">gender</span><span class="o">=</span><span class="n">gender</span><span class="p">,</span> <span class="n">marital_status</span><span class="o">=</span><span class="n">marital_status</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CustomerSchema">
+<a class="viewcode-back" href="../../customer_service.html#customer_service.models.CustomerSchema">[docs]</a>
+<span class="k">class</span> <span class="nc">CustomerSchema</span><span class="p">(</span><span class="n">ma</span><span class="o">.</span><span class="n">Schema</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The CustomerSchema object is used for serializing and deserializing customer data.</span>
+
+<span class="sd">    :ivar gender: The gender of the customer serialized using EnumField</span>
+<span class="sd">    :vartype gender: Gender</span>
+<span class="sd">    :ivar marital_status: The marital status of the customer serialized using EnumField</span>
+<span class="sd">    :vartype marital_status: MaritalStatus</span>
+<span class="sd">    :cvar Meta.fields: The fields included in the schema</span>
+<span class="sd">    :vartype Meta.fields: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gender</span> <span class="o">=</span> <span class="n">EnumField</span><span class="p">(</span><span class="n">Gender</span><span class="p">,</span> <span class="n">by_value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">marital_status</span> <span class="o">=</span> <span class="n">EnumField</span><span class="p">(</span><span class="n">MaritalStatus</span><span class="p">,</span> <span class="n">by_value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="CustomerSchema.Meta">
+<a class="viewcode-back" href="../../customer_service.html#customer_service.models.CustomerSchema.Meta">[docs]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Customer</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;full_name&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="s1">&#39;gender&#39;</span><span class="p">,</span> <span class="s1">&#39;marital_status&#39;</span><span class="p">,</span> <span class="s1">&#39;balance&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="n">customer_schema</span> <span class="o">=</span> <span class="n">CustomerSchema</span><span class="p">()</span>
+<span class="n">customers_schema</span> <span class="o">=</span> <span class="n">CustomerSchema</span><span class="p">(</span><span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ali Hajj Chehade, Tamer Safa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

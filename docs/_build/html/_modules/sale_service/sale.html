@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sale_service.sale &mdash; 435L Project 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            435L Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">435L Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sale_service.sale</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sale_service.sale</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">abort</span>
+<span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
+
+<span class="kn">from</span> <span class="nn">sale_service.models</span> <span class="kn">import</span> <span class="n">Sale</span><span class="p">,</span> <span class="n">sale_schema</span>
+<span class="kn">from</span> <span class="nn">shared.db</span> <span class="kn">import</span> <span class="n">db</span><span class="p">,</span> <span class="n">ma</span><span class="p">,</span> <span class="n">bcrypt</span>
+<span class="kn">from</span> <span class="nn">shared.token</span> <span class="kn">import</span> <span class="n">jwt</span><span class="p">,</span> <span class="n">extract_auth_token</span><span class="p">,</span> <span class="n">decode_token</span><span class="p">,</span> <span class="n">CUSTOMER_PATH</span><span class="p">,</span> <span class="n">INVENTORY_PATH</span><span class="p">,</span> <span class="n">LOG_PATH</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SQLALCHEMY_DATABASE_URI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///lab-project.db&quot;</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SQLALCHEMY_TRACK_MODIFICATIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<span class="n">bcrypt</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+<span class="n">ma</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="n">CORS</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="n">ADMIN_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzI3ODA2NTYsImlkIjoxfQ.T37k5vuFQO2YUKSVPL3mnqIJTwIw7-y0uIXaUYJZgOg&quot;</span>
+
+<div class="viewcode-block" id="get_goods">
+<a class="viewcode-back" href="../../sale_service.html#sale_service.sale.get_goods">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/goods&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_goods</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve a list of goods.</span>
+
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 500 for server errors</span>
+<span class="sd">    :return: JSON representation of available goods with their names and prices</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">INVENTORY_PATH</span><span class="si">}</span><span class="s1">/inventory&#39;</span><span class="p">)</span>
+    <span class="n">goods</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">response_data</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">good</span> <span class="ow">in</span> <span class="n">goods</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">response_data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_good">
+<a class="viewcode-back" href="../../sale_service.html#sale_service.sale.get_good">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/good:&lt;int:id&gt;&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_good</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieve details of a specific good by its ID.</span>
+
+<span class="sd">    :param id: The ID of the good to retrieve</span>
+<span class="sd">    :type id: int</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 404 if the good is not found, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the good details</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">INVENTORY_PATH</span><span class="si">}</span><span class="s1">/inventory:</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Good not found&quot;</span><span class="p">}),</span> <span class="mi">404</span></div>
+
+    
+    
+<div class="viewcode-block" id="make_sale">
+<a class="viewcode-back" href="../../sale_service.html#sale_service.sale.make_sale">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/sale&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">make_sale</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a sale for a specific good.</span>
+
+<span class="sd">    :param good_name: The name of the good to be sold</span>
+<span class="sd">    :type good_name: str</span>
+<span class="sd">    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if the good or customer is not found, 500 for server errors</span>
+<span class="sd">    :return: JSON representation of the sale details</span>
+<span class="sd">    :rtype: flask.Response</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">extract_auth_token</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">,</span> <span class="n">jwt</span><span class="o">.</span><span class="n">InvalidTokenError</span><span class="p">):</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s2">/customer:</span><span class="si">{</span><span class="n">customer_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">customer</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Server Error&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s1">&#39;good_name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Bad request&quot;</span><span class="p">)</span>
+    <span class="n">good_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;good_name&#39;</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">customer</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;full_name&#39;</span><span class="p">]</span>
+
+
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">INVENTORY_PATH</span><span class="si">}</span><span class="s1">/inventory:</span><span class="si">{</span><span class="n">good_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">good</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">CUSTOMER_PATH</span><span class="si">}</span><span class="s1">/customer:</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Good or User not found&quot;</span><span class="p">}),</span> <span class="mi">404</span>
+    
+    <span class="k">if</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Item &#39;</span><span class="si">{</span><span class="n">good_name</span><span class="si">}</span><span class="s2">&#39; is out of stock&quot;</span><span class="p">}),</span> <span class="mi">400</span>
+
+    <span class="k">if</span> <span class="n">customer</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;User &#39;</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">&#39; does not have enough money&quot;</span><span class="p">}),</span> <span class="mi">400</span>
+    
+    <span class="n">count</span> <span class="o">=</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;http://localhost:5001/inventory:</span><span class="si">{</span><span class="n">good</span><span class="p">[</span><span class="s2">&quot;inventory_id&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">count</span><span class="p">},</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">ADMIN_TOKEN</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;http://localhost:5000/deduct&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">good</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]},</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">customer</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">],</span> <span class="n">good</span><span class="p">[</span><span class="s1">&#39;inventory_id&#39;</span><span class="p">])</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">Sale</span><span class="p">(</span><span class="n">inventory_id</span><span class="o">=</span><span class="n">good</span><span class="p">[</span><span class="s1">&#39;inventory_id&#39;</span><span class="p">],</span> <span class="n">customer_id</span><span class="o">=</span><span class="n">customer</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">],</span> <span class="n">quantity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">good</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    
+    <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LOG_PATH</span><span class="si">}</span><span class="s2">/add-log&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;New sale of item </span><span class="si">{</span><span class="n">good_name</span><span class="si">}</span><span class="s2"> to customer </span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2"> for $</span><span class="si">{</span><span class="n">good</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+    
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">sale_schema</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span> <span class="mi">200</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5350</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Ali Hajj Chehade, Tamer Safa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
