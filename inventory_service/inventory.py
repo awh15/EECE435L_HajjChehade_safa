@@ -62,7 +62,7 @@ def add_inventory():
             return abort(400, "Bad Request")
         
     name = request.json['name']
-    category = request.json['category']
+    category = request.json['category'].upper()
     price = request.json['price']
     description = request.json['description']
     count = request.json['count']
@@ -77,14 +77,17 @@ def add_inventory():
             return abort(400, "Item Name Already Exists")
         
         inventory = Inventory(name=name, category=category, price=price, description=description, count=count)
-
+        print(category)
         db.session.add(inventory)
         db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json['username']} added new inventory item {name}"})
+        print("here")
+        
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json()['username']} added new inventory item {name}"})
 
         return jsonify(inventory_schema.dump(inventory)), 200
     except Exception as e:
+        print(e)
         return abort(500, "Server Error")
 
 
@@ -167,10 +170,11 @@ def update_inventory(inventory_id):
 
         db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json['username']} updated inventory item {inventory.name}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json()['username']} updated inventory item {inventory.name}"})
 
         return jsonify(inventory_schema.dump(inventory)), 200
     except Exception as e:
+        print(e)
         return abort(500, "Server Error")
 
 
@@ -208,8 +212,9 @@ def delete_inventory(inventory_id):
             return abort(404, "Item not Found")
         
         db.session.delete(inventory)
+        db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json['username']} deleted inventory item {inventory.name}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {admin.json()['username']} deleted inventory item {inventory.name}"})
 
         return {"Message": "Item Deleted Successfully"}, 200
     except Exception as e:

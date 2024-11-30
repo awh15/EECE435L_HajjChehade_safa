@@ -17,11 +17,13 @@ ma.init_app(app)
 
 CORS(app)
 
+ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzI3ODA2NTYsImlkIjoxfQ.T37k5vuFQO2YUKSVPL3mnqIJTwIw7-y0uIXaUYJZgOg"
+
 @app.route('/goods', methods=['GET'])
 def get_goods():
     response = requests.get(f'{INVENTORY_PATH}/inventory')
     goods = response.json()
-    response_data = [{"name": good.name, "price": good.price} for good in goods]
+    response_data = [{"name": good["name"], "price": good["price"]} for good in goods]
     return jsonify(response_data)
 
 @app.route('/good:<int:id>', methods=['GET'])
@@ -62,9 +64,9 @@ def make_sale():
 
 
     try: 
-        response = requests.get(f'{INVENTORY_PATH}/inventory:{good_name}/')
+        response = requests.get(f'{INVENTORY_PATH}/inventory:{good_name}')
         good = response.json()
-        response = requests.get(f'{CUSTOMER_PATH}/customer:{username}/')
+        response = requests.get(f'{CUSTOMER_PATH}/customer:{username}')
         customer = response.json()
     except:
         return jsonify({"message": "Good or User not found"}), 404
@@ -76,11 +78,9 @@ def make_sale():
         return jsonify({"error": f"User '{username}' does not have enough money"}), 400
     
     count = good["count"]-1
-    balance = customer["balance"]-good["price"]
-    
-    response = requests.put(f'http://localhost:5001/inventory:{good["inventory_id"]}/', json={"count": count})
-    response = requests.put(f'http://localhost:5000/deduct', json={"amount": balance}, headers={"Authorization": f"Bearer {token}"})
-    
+    response = requests.put(f'http://localhost:5001/inventory:{good["inventory_id"]}', json={"count": count}, headers={"Authorization": f"Bearer {ADMIN_TOKEN}"})
+    response = requests.post(f'http://localhost:5000/deduct', json={"amount": good["price"]}, headers={"Authorization": f"Bearer {token}"})
+    print(customer['user_id'], good['inventory_id'])
     s = Sale(inventory_id=good['inventory_id'], customer_id=customer['user_id'], quantity=1, price=good['price'])
     db.session.add(s)
     db.session.commit()

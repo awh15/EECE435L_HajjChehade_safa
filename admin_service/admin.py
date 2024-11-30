@@ -58,6 +58,7 @@ def create_admin():
 
         return jsonify(admin_schema.dump(new_admin)), 200
     except Exception as e:
+        print(e)
         abort(500, "Server Error")
 
 

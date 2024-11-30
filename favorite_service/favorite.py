@@ -65,7 +65,7 @@ def add_favorite(inventory_id):
         db.session.add(favorite)
         db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Added item {inventory.json['name']} as favorite to customer: {customer.json['username']}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Added item {inventory.json()['name']} as favorite to customer: {customer.json()['username']}"})
 
         return jsonify(favorite_schema.dump(favorite)), 200
     except Exception as e:
@@ -111,10 +111,11 @@ def delete_favorite(favorite_id):
         db.session.delete(favorite)
         db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted favorite item {favorite_id} to customer: {customer.json['username']}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted favorite item {favorite_id} to customer: {customer.json()['username']}"})
 
         return {"Message": "Favorite Deleted"}, 200
     except Exception as e:
+        print(e)
         return abort(500, "Server Error")
 
 
@@ -139,20 +140,20 @@ def get_favorite(favorite_id):
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         abort(403, "Something went wrong")
 
-    try:
-        customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
+    customer = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
 
-        if customer.status_code == 404:
-            return abort(401, "Unauthorized")
-        
-        favorite = Favorite.query.filter_by(favorite_id=favorite_id).first()
+    if customer.status_code == 404:
+        return abort(401, "Unauthorized")
+    
+    favorite = Favorite.query.filter_by(favorite_id=favorite_id).first()
 
-        if not favorite:
-            return abort(404, "Favorite Not Found")
-        
-        return jsonify(favorite_schema.dump(favorite)), 200
-    except Exception as e:
-        return abort(500, "Server Error")
+    if not favorite:
+        return abort(404, "Favorite Not Found")
+    
+    if favorite.customer_id != customer_id:
+        return abort(401, "Unauthorized")
+    
+    return jsonify(favorite_schema.dump(favorite)), 200
 
 
 @app.route('/favorites', methods=['GET'])
@@ -226,7 +227,7 @@ def add_wishlist(inventory_id):
 
         db.session.add(wishlist)
         db.session.commit()
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Added item {inventory.json['name']} as wishlist to customer: {customer.json['username']}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Added item {inventory.json()['name']} as wishlist to customer: {customer.json()['username']}"})
 
         return jsonify(wishlist_schema.dump(wishlist)), 200
     except Exception as e:
@@ -271,7 +272,7 @@ def delete_wishlist(wishlist_id):
         db.session.delete(wishlist)
         db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted wishlist item {wishlist_id} of customer: {customer.json['username']}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Deleted wishlist item {wishlist_id} of customer: {customer.json()['username']}"})
 
         return {"Message": "Wishlist Deleted"}, 200
     except Exception as e:

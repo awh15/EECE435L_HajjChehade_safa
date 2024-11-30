@@ -13,8 +13,8 @@ from datetime import datetime
 
 class Sale(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
-    inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.inventory_id'), nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.user_id'), nullable=False)
+    inventory_id = db.Column(db.Integer, nullable=False)
+    customer_id = db.Column(db.Integer, nullable=False)
     date = db.Column(db.String(30), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
@@ -26,7 +26,7 @@ class Sale(db.Model):
 class SaleSchema(ma.Schema):
     class Meta:
         model = Sale
-        fields = ('sale_id', 'inentory_id', 'customer_id', 'quantity', 'price')
+        fields = ('sale_id', 'inventory_id', 'customer_id', 'quantity', 'price', 'date')
 
-sale_schema = SaleSchema
+sale_schema = SaleSchema()
 sales_schema = SaleSchema(many=True)

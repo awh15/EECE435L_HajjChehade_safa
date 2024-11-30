@@ -68,10 +68,10 @@ def update_review():
     if 'review_id' not in request.json or ('rating' not in request.json and 'comment' not in request.json):
         abort(400, "Bad Request")
         
-    review_id = request.json['review_id']
-    rating = request.json['rating']
-    comment = request.json['comment']
-
+    review_id = request.json.get('review_id')
+    rating = request.json.get('rating')
+    comment = request.json.get('comment')
+    
     review = Review.query.filter_by(review_id=review_id).first()
     if not review:
         abort(404, "Review not found")
@@ -200,7 +200,7 @@ def moderate_reviews():
         review.flag = flag
         db.session.commit()
         
-        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {response.json['username']} flagged review {review_id}"})
+        requests.post(f"{LOG_PATH}/add-log", json={"message": f"Admin {response.json()['username']} flagged review {review_id}"})
         
         return jsonify(review_schema.dump(review)), 200
     
