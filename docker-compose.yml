@@ -1,0 +1,96 @@
+version: '3.9'
+
+services:
+  sale_service:
+    build:
+      context: .
+      dockerfile: sale_service/Dockerfile
+    container_name: sale_service
+    ports:
+      - "5350:5350"
+    volumes:
+      - ./sale_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  admin_service:
+    build:
+      context: .
+      dockerfile: admin_service/Dockerfile
+    container_name: admin_service
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./admin_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  customer_service:
+    build:
+      context: .
+      dockerfile: customer_service/Dockerfile
+    container_name: customer_service
+    ports:
+      - "5100:5100"
+    volumes:
+      - ./customer_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  favorite_service:
+    build:
+      context: .
+      dockerfile: favorite_service/Dockerfile
+    container_name: favorite_service
+    ports:
+      - "5150:5150"
+    volumes:
+      - ./favorite_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  inventory_service:
+    build:
+      context: .
+      dockerfile: inventory_service/Dockerfile
+    container_name: inventory_service
+    ports:
+      - "5200:5200"
+    volumes:
+      - ./inventory_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  log_service:
+    build:
+      context: .
+      dockerfile: log_service/Dockerfile
+    container_name: log_service
+    ports:
+      - "5250:5250"
+    volumes:
+      - ./log_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  review_service:
+    build:
+      context: .
+      dockerfile: review_service/Dockerfile
+    container_name: review_service
+    ports:
+      - "5300:5300"
+    volumes:
+      - ./review_service:/app
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  shared:
