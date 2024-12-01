@@ -2,18 +2,6 @@ from shared.db import db, ma, bcrypt
 from enum import Enum
 from marshmallow_enum import EnumField
 
-'''
-• Customer ID
-• Full name
-• Username (unique)
-• Password
-• Balance
-• Age
-• Address
-• Gender
-• Maritalstatus
-'''
-
 class Gender(Enum):
     MALE = "male"
     FEMALE = "female"

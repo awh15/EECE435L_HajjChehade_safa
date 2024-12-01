@@ -70,7 +70,7 @@ def get_customer_by_name(full_name):
 
     try:
         customer = Customer.query.filter_by(full_name=full_name).first()
-
+        print(customer)
         if not customer:
             abort(404, "Customer Not Found")
         
@@ -167,14 +167,11 @@ def update_customer():
         abort(403, "Something went wrong")
 
     try:
-        admin = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
-
-        if admin.status_code == 404:
-            return abort(401, "Unauthorized")
+        customer = Customer.query.filter_by(user_id=customer_id).first()
         
-        if admin.status_code == 500:
-            return abort(500, "Server Error")
-    except:
+        if not customer:
+            abort(404, "Customer Not Found")
+    except Exception as e:
         abort(500, "Server Error")
     
     balance = request.json.get('balance')
@@ -221,7 +218,6 @@ def update_customer():
         db.session.commit()
         
         requests.post(f"{LOG_PATH}/add-log", json={"message": f"Updated customer information: {customer.username}"})
-
         return jsonify(customer_schema.dump(customer)), 200
     except Exception as e:
         print(e)
@@ -294,7 +290,6 @@ def delete_customer():
     else:
         abort(403, "Unauthorized")
         
-
 
 @app.route('/deduct', methods=['POST'])
 def deduct():
@@ -436,7 +431,7 @@ def get_customer_by_id(customer_id):
     '''
     try:
         customer = Customer.query.filter_by(user_id=customer_id).first()
-
+        
         if not customer:
             return abort(404, "Customer Not Found")
         

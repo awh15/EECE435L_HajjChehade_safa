@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
+from urllib.parse import quote
 
 from sale_service.models import Sale, sale_schema
 from shared.db import db, ma, bcrypt
@@ -37,7 +38,6 @@ def get_good(id):
     
 @app.route('/sale', methods=['POST'])
 def make_sale():
-    
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -54,23 +54,26 @@ def make_sale():
         
         if customer.status_code == 500:
             return abort(500, "Server Error")
-    except:
+    except Exception as e:
         abort(500, "Server Error")
+
     data = request.get_json()
     if 'good_name' not in data:
         abort(400, "Bad request")
     good_name = data.get('good_name')
     username = customer.json()['full_name']
 
-
     try: 
         response = requests.get(f'{INVENTORY_PATH}/inventory:{good_name}')
         good = response.json()
-        response = requests.get(f'{CUSTOMER_PATH}/customer:{username}')
+
+        response = requests.get(f"{CUSTOMER_PATH}/customer:{customer_id}")
         customer = response.json()
-    except:
+        print(customer)
+    except Exception as e:
+        print(e)
         return jsonify({"message": "Good or User not found"}), 404
-    
+
     if good['count'] == 0:
         return jsonify({"error": f"Item '{good_name}' is out of stock"}), 400
 
@@ -78,10 +81,11 @@ def make_sale():
         return jsonify({"error": f"User '{username}' does not have enough money"}), 400
     
     count = good["count"]-1
-    response = requests.put(f'http://localhost:5001/inventory:{good["inventory_id"]}', json={"count": count}, headers={"Authorization": f"Bearer {ADMIN_TOKEN}"})
-    response = requests.post(f'http://localhost:5000/deduct', json={"amount": good["price"]}, headers={"Authorization": f"Bearer {token}"})
-    print(customer['user_id'], good['inventory_id'])
+    response = requests.put(f'{INVENTORY_PATH}/inventory:{good["inventory_id"]}', json={"count": count}, headers={"Authorization": f"Bearer {ADMIN_TOKEN}"})
+    response = requests.post(f'{CUSTOMER_PATH}/deduct', json={"amount": good["price"]}, headers={"Authorization": f"Bearer {token}"})
+
     s = Sale(inventory_id=good['inventory_id'], customer_id=customer['user_id'], quantity=1, price=good['price'])
+
     db.session.add(s)
     db.session.commit()
     

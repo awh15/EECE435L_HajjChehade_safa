@@ -2,15 +2,6 @@ from shared.db import db, ma
 from enum import Enum
 from marshmallow_enum import EnumField
 
-'''
-• Inventory ID
-• Name (unique)
-• Category (food, clothes, accessories, electronics) 
-• Price per item
-• Description
-• Count of available items in stock
-'''
-
 class Category(Enum):
     FOOD = "food"
     CLOTHES = "clothes"

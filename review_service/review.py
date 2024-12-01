@@ -102,7 +102,7 @@ def delete_review():
 
     response1 = requests.get(f"{CUSTOMER_PATH}/customer:{id}")
     response2 = requests.get(f"{ADMIN_PATH}/admin:{id}")
-    
+
     if response1.status_code == 200:
         customer = response1.json()
     

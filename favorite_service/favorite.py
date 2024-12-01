@@ -69,6 +69,7 @@ def add_favorite(inventory_id):
 
         return jsonify(favorite_schema.dump(favorite)), 200
     except Exception as e:
+        print(e)
         return abort(500, "Server Error")
 
 
