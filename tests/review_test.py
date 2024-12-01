@@ -139,9 +139,13 @@ def test_delete_review_by_admin(mock_post, mock_get, client, admin_headers):
     Test deleting a review by the admin.
     """
     # Mock admin validation
-    mock_get.return_value.status_code = 200
-    mock_get.return_value.json.return_value = {"admin_id": 99, "username": "adminuser"}
-
+    mock_get.side_effect = [
+        # First call: CUSTOMER_PATH
+        type("MockResponse", (), {"status_code": 404, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 1500.00}}),
+        # Second call: INVENTORY_PATH
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"admin_id": 99, "username": "adminuser"}})
+    ]
+    
     # Mock log service
     mock_post.return_value.status_code = 200
 

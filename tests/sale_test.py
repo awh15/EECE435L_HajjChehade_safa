@@ -151,7 +151,9 @@ def test_make_sale(mock_put, mock_post, mock_get, client, customer_headers):
         # First call: CUSTOMER_PATH
         type("MockResponse", (), {"status_code": 200, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 1500.00}}),
         # Second call: INVENTORY_PATH
-        type("MockResponse", (), {"status_code": 200, "json": lambda: {"inventory_id": 1, "name": "Laptop", "price": 999.99, "count": 10}})
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"inventory_id": 1, "name": "Laptop", "price": 999.99, "count": 10}}),
+        # Third call: CUSTOMER_PATH
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 1350.00}})
     ]
 
     # Mock inventory update and log service
@@ -179,7 +181,9 @@ def test_make_sale_insufficient_balance(mock_post, mock_get, client, customer_he
         # First call: CUSTOMER_PATH
         type("MockResponse", (), {"status_code": 200, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 500.00}}),
         # Second call: INVENTORY_PATH
-        type("MockResponse", (), {"status_code": 200, "json": lambda: {"inventory_id": 1, "name": "Laptop", "price": 999.99, "count": 10}})
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"inventory_id": 1, "name": "Laptop", "price": 999.99, "count": 10}}),
+        # Third call: CUSTOMER_PATH
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 500.00}})
     ]
 
     response = client.post("/sale", json={"good_name": "Laptop"}, headers=customer_headers)
@@ -200,7 +204,9 @@ def test_make_sale_out_of_stock(mock_post, mock_get, client, customer_headers):
         # First call: CUSTOMER_PATH
         type("MockResponse", (), {"status_code": 200, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 1500.00}}),
         # Second call: INVENTORY_PATH
-        type("MockResponse", (), {"status_code": 200, "json": lambda: {"inventory_id": 1, "name": "Laptop", "price": 999.99, "count": 0}})
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"inventory_id": 1, "name": "Laptop", "price": 999.99, "count": 0}}),
+        # Third call: CUSTOMER_PATH
+        type("MockResponse", (), {"status_code": 200, "json": lambda: {"user_id": 1, "full_name": "John Doe", "balance": 1500.00}})
     ]
 
     response = client.post("/sale", json={"good_name": "Laptop"}, headers=customer_headers)
