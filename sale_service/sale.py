@@ -22,6 +22,13 @@ ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzI3ODA2NTYsImlk
 
 @app.route('/goods', methods=['GET'])
 def get_goods():
+    """
+    Retrieve a list of goods.
+
+    :raises werkzeug.exceptions.HTTPException: 500 for server errors
+    :return: JSON representation of available goods with their names and prices
+    :rtype: flask.Response
+    """
     response = requests.get(f'{INVENTORY_PATH}/inventory')
     goods = response.json()
     response_data = [{"name": good["name"], "price": good["price"]} for good in goods]
@@ -29,6 +36,15 @@ def get_goods():
 
 @app.route('/good:<int:id>', methods=['GET'])
 def get_good(id):
+    """
+    Retrieve details of a specific good by its ID.
+
+    :param id: The ID of the good to retrieve
+    :type id: int
+    :raises werkzeug.exceptions.HTTPException: 404 if the good is not found, 500 for server errors
+    :return: JSON representation of the good details
+    :rtype: flask.Response
+    """
     try:
         response = requests.get(f'{INVENTORY_PATH}/inventory:{id}')
         return jsonify(response.json())
@@ -38,6 +54,15 @@ def get_good(id):
     
 @app.route('/sale', methods=['POST'])
 def make_sale():
+    """
+    Make a sale for a specific good.
+
+    :param good_name: The name of the good to be sold
+    :type good_name: str
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if the good or customer is not found, 500 for server errors
+    :return: JSON representation of the sale details
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")

@@ -21,21 +21,15 @@ CORS(app)
 
 @app.route('/favorite:<int:inventory_id>', methods=['POST'])
 def add_favorite(inventory_id):
-    '''
-    Add Favorite.
+    """
+    Add an item to the favorites list.
 
-    Requires:
-        customer_id (int)
-        inventory_id (int)
-
-    Returns:
-        200: Favorite Added
-        400: Bad Request
-        401: Unauthorized
-        403: Invalid Token
-        404: Not Found
-        500: Server Error
-    '''
+    :param inventory_id: The ID of the inventory item to add as a favorite
+    :type inventory_id: int
+    :raises werkzeug.exceptions.HTTPException: 400 if item is already a favorite, 401 if unauthorized, 403 for invalid token, 404 if item or customer not found, 500 for server errors
+    :return: JSON representation of the added favorite
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -76,20 +70,15 @@ def add_favorite(inventory_id):
 
 @app.route('/favorite:<int:favorite_id>', methods=['DELETE'])
 def delete_favorite(favorite_id):
-    '''
-    Delete Favorite by id.
+    """
+    Delete a favorite item by ID.
 
-    Requires:
-        favorite_id (int)
-
-    Returns:
-        200: Favorite Deleted
-        400: Bad Request
-        401: Unauthorized
-        403: Invalid Token
-        404: Favorite Not Found
-        500: Server Error
-    '''
+    :param favorite_id: The ID of the favorite item to delete
+    :type favorite_id: int
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if favorite not found, 500 for server errors
+    :return: Success message confirming deletion
+    :rtype: dict
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -122,17 +111,15 @@ def delete_favorite(favorite_id):
 
 @app.route('/favorite:<int:favorite_id>', methods=['GET'])
 def get_favorite(favorite_id):
-    '''
-    Get Favorite by id.
+    """
+    Get a favorite item by ID.
 
-    Requires:
-        favorite_id (int)
-
-    Returns:
-        200: Favorite Schema
-        404: Favorite Not Found
-        500: Server Error
-    '''
+    :param favorite_id: The ID of the favorite item to retrieve
+    :type favorite_id: int
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if favorite not found, 500 for server errors
+    :return: JSON representation of the favorite item
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -159,15 +146,13 @@ def get_favorite(favorite_id):
 
 @app.route('/favorites', methods=['GET'])
 def get_favorites():
-    '''
-    Get all customer favorites.
-    
-    Returns:
-        200: Favorites Schema
-        401: Unauthorized
-        403: Invalid Token
-        500: Server Error
-    '''
+    """
+    Get all favorite items for the authenticated customer.
+
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 500 for server errors
+    :return: JSON representation of the customer's favorites
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -191,20 +176,15 @@ def get_favorites():
 
 @app.route('/wishlist:<int:inventory_id>', methods=['POST'])
 def add_wishlist(inventory_id):
-    '''
-    Add Wishlist.
+    """
+    Add an item to the wishlist.
 
-    Requires:
-        inventory_id (int)
-
-    Returns:
-        200: Wishlist Schema
-        400: Bad Request
-        401: Unauthorized
-        403: Invalid Token
-        404: Item Not Found
-        500: Server Error
-    '''
+    :param inventory_id: The ID of the inventory item to add to the wishlist
+    :type inventory_id: int
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 401 if unauthorized, 403 for invalid token, 404 if item or customer not found, 500 for server errors
+    :return: JSON representation of the added wishlist item
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -237,20 +217,15 @@ def add_wishlist(inventory_id):
 
 @app.route('/wishlist:<int:wishlist_id>', methods=['DELETE'])
 def delete_wishlist(wishlist_id):
-    '''
-    Delete Wishlist.
+    """
+    Delete a wishlist item by ID.
 
-    Requires:
-        wishlist_id (int)
-
-    Returns:
-        200: Wishlist Deleted
-        400: Bad Request
-        401: Unauthorized
-        403: Invalid Token
-        404: Wishlist Not Found
-        500: Server Error
-    '''
+    :param wishlist_id: The ID of the wishlist item to delete
+    :type wishlist_id: int
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if wishlist not found, 500 for server errors
+    :return: Success message confirming deletion
+    :rtype: dict
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -282,15 +257,13 @@ def delete_wishlist(wishlist_id):
 
 @app.route('/wishlists', methods=['GET'])
 def get_wishlists():
-    '''
-    Get customer wishlists.
-    
-    Returns:
-        200: Wishlists Schema
-        401: Unauthorized
-        403: Invalid Token
-        500: Server Error
-    '''
+    """
+    Get all wishlist items for the authenticated customer.
+
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 500 for server errors
+    :return: JSON representation of the customer's wishlists
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -314,17 +287,15 @@ def get_wishlists():
 
 @app.route('/wishlist:<int:wishlist_id>', methods=['GET'])
 def get_wishlist(wishlist_id):
-    '''
-    Get wishlist by id.
+    """
+    Get a wishlist item by ID.
 
-    Requires:
-        wishlist_id (int)
-
-    Returns:
-        200: Wishlist Schema
-        404: Wishlist Not Found
-        500: Server Error
-    '''
+    :param wishlist_id: The ID of the wishlist item to retrieve
+    :type wishlist_id: int
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 for invalid token, 404 if wishlist not found, 500 for server errors
+    :return: JSON representation of the wishlist item
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")

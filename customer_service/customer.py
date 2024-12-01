@@ -19,16 +19,15 @@ CORS(app)
 
 @app.route('/customers', methods=['GET'])
 def get_all_customers():
-    '''
+    """
     Get all customers.
-    Must be an Admin.
 
-    Returns:
-        200: Customers Schema
-        401: Unauthorized
-        403: Invalid Token
-        500: Server Error
-    '''
+    Must be an admin to access this route.
+
+    :raises werkzeug.exceptions.HTTPException: 401 if unauthorized, 403 if invalid token, 500 for server errors
+    :return: JSON representation of all customers
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -55,19 +54,15 @@ def get_all_customers():
 
 @app.route('/customer:<string:full_name>', methods=['GET'])
 def get_customer_by_name(full_name):
-    '''
-    Get customer by username.
+    """
+    Get a customer by their full name.
 
-    Requires:
-        name (str)
-
-    Returns:
-        200: Customer Schema
-        400: Bad Request
-        404: Not Found
-        500: Server Error
-    '''
-
+    :param full_name: The full name of the customer
+    :type full_name: str
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 404 if customer not found, 500 for server errors
+    :return: JSON representation of the customer
+    :rtype: flask.Response
+    """
     try:
         customer = Customer.query.filter_by(full_name=full_name).first()
         print(customer)
@@ -81,23 +76,15 @@ def get_customer_by_name(full_name):
 
 @app.route('/customer', methods=['POST'])
 def create_customer():
-    '''
-    Create new customer.
+    """
+    Create a new customer.
 
-    Requires:
-        full_name (str)
-        username (str)
-        password (str)
-        age (int)
-        address (str)
-        gender (str)
-        marital_status (str)
-
-    Returns:
-        200: Customer Schema
-        400: Bad Request
-        500: Server Error
-    '''
+    :param request: HTTP request containing required customer fields
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 500 for server errors
+    :return: JSON representation of the created customer
+    :rtype: flask.Response
+    """
     required_fields = ['full_name', 'username', 'password', 'age', 'address', 'gender', 'marital_status']
 
     for field in required_fields:
@@ -136,28 +123,15 @@ def create_customer():
 
 @app.route('/customer', methods=['PUT'])
 def update_customer():
-    '''
-    Update customer information.
+    """
+    Update an existing customer's information.
 
-    Requires:
-        customer_id (int)
-
-    Optional:
-        balance (float)
-        username (str)
-        password (str)
-        address (str)
-        marital_status (str)
-
-    Returns:
-        200: Customer Schema
-        400: Bad Request
-        403: Invalid Token
-        404: Not Found
-        500: Server Error
-    '''
-    
-    
+    :param request: HTTP request containing optional customer fields to update
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for invalid token, 404 if customer not found, 500 for server errors
+    :return: JSON representation of the updated customer
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -226,18 +200,15 @@ def update_customer():
 
 @app.route('/customer', methods=['DELETE'])
 def delete_customer():
-    '''
-    Delete Customer.
+    """
+    Delete a customer.
 
-    Requires:
-        customer_id (int)
-    
-    Returns:
-        200: Customer Deleted
-        404: Not Found
-        500: Server Error
-    '''
-    
+    :param request: HTTP request containing the customer ID
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if customer not found, 500 for server errors
+    :return: Success message indicating deletion
+    :rtype: dict
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -293,22 +264,17 @@ def delete_customer():
 
 @app.route('/deduct', methods=['POST'])
 def deduct():
-    '''
-    Deduct from customer balance.
+    """
+    Deduct an amount from a customer's balance.
 
-    Customer balance must be greater than amount to be deducted.
+    Customer's balance must be greater than the amount to deduct.
 
-    Requires:
-        customer_id (int)
-        amount (float)
-
-    Returns:
-        200: Customer Schema
-        400: Bad Request
-        404: Customer Not Found
-        500: Server Error
-    '''
-    
+    :param request: HTTP request containing the amount to deduct
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 404 if customer not found, 500 for server errors
+    :return: JSON representation of the updated customer
+    :rtype: flask.Response
+    """ 
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -358,20 +324,15 @@ def deduct():
 
 @app.route('/charge', methods=['POST'])
 def charge():
-    '''
-    Charge customer with amount.
+    """
+    Charge an amount to a customer's balance.
 
-    Requires:
-        customer_id (int)
-        amount (float)
-
-    Returns:
-        200: Customer Schema
-        400: Bad Request
-        404: Customer Not Found
-        500: Server Error
-    '''
-    
+    :param request: HTTP request containing the amount to charge
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 404 if customer not found, 500 for server errors
+    :return: JSON representation of the updated customer
+    :rtype: flask.Response
+    """ 
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -418,17 +379,15 @@ def charge():
 
 @app.route('/customer:<int:customer_id>', methods=['GET'])
 def get_customer_by_id(customer_id):
-    '''
-    Get customer by id.
+    """
+    Get a customer by their ID.
 
-    Requires:
-        customer_id (int)
-
-    Returns:
-        200: Customer Schema
-        404: Customer Not Found
-        500: Server Error
-    '''
+    :param customer_id: The ID of the customer
+    :type customer_id: int
+    :raises werkzeug.exceptions.HTTPException: 404 if customer not found, 500 for server errors
+    :return: JSON representation of the customer
+    :rtype: flask.Response
+    """
     try:
         customer = Customer.query.filter_by(user_id=customer_id).first()
         
@@ -442,6 +401,15 @@ def get_customer_by_id(customer_id):
 
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
+    """
+    Authenticate a customer.
+
+    :param request: HTTP request containing 'username' and 'password'
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 401 if unauthorized, 500 for server errors
+    :return: JSON containing the authentication token
+    :rtype: flask.Response
+    """
     if 'username' not in request.json or 'password' not in request.json:
         abort(400, "Bad Request")
     username = request.json['username']

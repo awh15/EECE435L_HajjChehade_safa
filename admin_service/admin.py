@@ -20,18 +20,17 @@ CORS(app)
 
 @app.route('/create-admin', methods=['POST'])
 def create_admin():
-    '''
-    Create new admin.
+    """
+    Create a new admin.
 
-    Requires:
-        username (str)
-        password (str)
-
-    Returns:
-        200: Admin Schema
-        400: Bad Request
-        500: Server Error
-    '''
+    :param request: HTTP request containing 'username' and 'password' in JSON, defaults to None
+    :type request: flask.Request
+    :raises jwt.ExpiredSignatureError: If the token has expired
+    :raises jwt.InvalidTokenError: If the token is invalid
+    :raises werkzeug.exceptions.HTTPException: 403 if unauthorized or token issues, 400 for bad request, 500 for server error
+    :return: JSON representation of the created admin
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -64,19 +63,15 @@ def create_admin():
 
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
-    '''
-    Authenticate admin.
+    """
+    Authenticate an admin.
 
-    Requires:
-        username (str)
-        password (str)
-
-    Returns:
-        200: Token
-        400: Bad Request
-        401: Unauthorized
-        500: Server Error
-    '''
+    :param request: HTTP request containing 'username' and 'password' in JSON, defaults to None
+    :type request: flask.Request
+    :raises werkzeug.exceptions.HTTPException: 400 if bad request, 401 if unauthorized, 500 for server error
+    :return: JSON containing the authentication token
+    :rtype: flask.Response
+    """
     if 'password' not in request.json or 'username' not in request.json:
         abort(400, "Bad Request")
 
@@ -101,17 +96,16 @@ def authenticate():
 
 @app.route('/admin:<int:admin_id>', methods=['GET'])
 def get_admin(admin_id):
-    '''
-    Get admin by id.
+    """
+    Get an admin by their ID.
 
-    Requires:
-        admin_id (int)
+    :param admin_id: The ID of the admin
+    :type admin_id: int
+    :raises werkzeug.exceptions.HTTPException: 404 if admin not found, 500 for server error
+    :return: JSON representation of the admin
+    :rtype: flask.Response
+    """
 
-    Returns:
-        200: Admin Schema
-        404: Not Found
-        500: Server Error
-    '''
     try:
         admin = Admin.query.filter_by(admin_id=admin_id).first()
 

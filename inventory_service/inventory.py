@@ -18,30 +18,25 @@ ma.init_app(app)
 
 CORS(app)
 
-'''
-• Adding goods
-• Deducting goods
-• Updating goods
-'''
-
 @app.route('/inventory', methods=['POST'])
 def add_inventory():
-    '''
-    Add Inventory.
+    """
+    Add a new inventory item.
 
-    Requires:
-        name (str)
-        category (str)
-        price (float)
-        description (str)
-        count (int)
-
-    Returns:
-        200: Inventory Schema
-        400: Bad Request
-        500: Server Error
-    '''
-    
+    :param name: The name of the inventory item
+    :type name: str
+    :param category: The category of the inventory item
+    :type category: str
+    :param price: The price of the inventory item
+    :type price: float
+    :param description: A description of the inventory item
+    :type description: str
+    :param count: The count/quantity of the inventory item
+    :type count: int
+    :raises werkzeug.exceptions.HTTPException: 400 for bad request, 403 for unauthorized access, 500 for server errors
+    :return: JSON representation of the newly created inventory item
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -93,26 +88,25 @@ def add_inventory():
 
 @app.route('/inventory:<int:inventory_id>', methods=['PUT'])
 def update_inventory(inventory_id):
-    '''
-    Update existing inventory.
+    """
+    Update an existing inventory item.
 
-    Requires:
-        inventory_id (int)
-
-    Optional:
-        name (str)
-        category (str)
-        price (float)
-        description (str)
-        count (str)
-
-    Returns:
-        200: Inventory Schema
-        404: Inventory Not Found
-        400: Bad Request
-        500: Server Error
-    '''
-    
+    :param inventory_id: The ID of the inventory item to update
+    :type inventory_id: int
+    :param name: (Optional) The updated name of the inventory item
+    :type name: str, optional
+    :param category: (Optional) The updated category of the inventory item
+    :type category: str, optional
+    :param price: (Optional) The updated price of the inventory item
+    :type price: float, optional
+    :param description: (Optional) The updated description of the inventory item
+    :type description: str, optional
+    :param count: (Optional) The updated count/quantity of the inventory item
+    :type count: int, optional
+    :raises werkzeug.exceptions.HTTPException: 400 for bad request, 403 for unauthorized access, 404 if inventory item is not found, 500 for server errors
+    :return: JSON representation of the updated inventory item
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -180,18 +174,15 @@ def update_inventory(inventory_id):
 
 @app.route('/inventory:<int:inventory_id>', methods=['DELETE'])
 def delete_inventory(inventory_id):
-    '''
-    Delete existing inventory.
+    """
+    Delete an existing inventory item.
 
-    Requires:
-        inventory_id (int)
-
-    Returns:
-        200: Inventory Deleted
-        404: Inventory Not Found
-        500: Server Error
-    '''
-    
+    :param inventory_id: The ID of the inventory item to delete
+    :type inventory_id: int
+    :raises werkzeug.exceptions.HTTPException: 403 for unauthorized access, 404 if inventory item is not found, 500 for server errors
+    :return: Success message confirming the deletion
+    :rtype: dict
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -223,23 +214,28 @@ def delete_inventory(inventory_id):
     
 @app.route('/inventory', methods=['GET'])
 def get_inventory():
+    """
+    Retrieve all inventory items.
+
+    :raises werkzeug.exceptions.HTTPException: 500 for server errors
+    :return: JSON representation of all inventory items
+    :rtype: flask.Response
+    """
     inventories = Inventory.query.all()
     return jsonify(inventories_schema.dump(inventories)), 200
 
 
 @app.route('/inventory:<string:name>', methods=['GET'])
 def get_inventory_by_name(name):
-    '''
-    Get Inventory by name.
+    """
+    Retrieve an inventory item by its name.
 
-    Requires:
-        name (string)
-
-    Returns:
-        200: Inventory Schema
-        404: Inventory Not Found
-        500: Server Error
-    '''
+    :param name: The name of the inventory item to retrieve
+    :type name: str
+    :raises werkzeug.exceptions.HTTPException: 404 if inventory item is not found, 500 for server errors
+    :return: JSON representation of the inventory item
+    :rtype: flask.Response
+    """
     try:
         inventory = Inventory.query.filter_by(name=name).first()
 
@@ -253,17 +249,15 @@ def get_inventory_by_name(name):
 
 @app.route('/inventory:<int:inventory_id>', methods=['GET'])
 def get_inventory_by_id(inventory_id):
-    '''
-    Get Inventory by id.
+    """
+    Retrieve an inventory item by its ID.
 
-    Requires:
-        inventory_id (int)
-
-    Returns:
-        200: Inventory Schema
-        404: Inventory Not Found
-        500: Server Error
-    '''
+    :param inventory_id: The ID of the inventory item to retrieve
+    :type inventory_id: int
+    :raises werkzeug.exceptions.HTTPException: 404 if inventory item is not found, 500 for server errors
+    :return: JSON representation of the inventory item
+    :rtype: flask.Response
+    """
     try:
         inventory = Inventory.query.filter_by(inventory_id=inventory_id).first()
 

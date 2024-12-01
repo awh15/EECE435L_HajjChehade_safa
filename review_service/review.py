@@ -21,6 +21,20 @@ CORS(app)
 
 @app.route('/review', methods=['POST'])
 def submit_review():
+    """
+    Submit a review for a product.
+
+    :param inventory_id: The ID of the inventory item being reviewed
+    :type inventory_id: int
+    :param rating: The rating given by the customer
+    :type rating: int
+    :param comment: The review comment
+    :type comment: str
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 500 for server errors
+    :return: JSON representation of the created review
+    :rtype: flask.Response
+    """
+
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -52,6 +66,19 @@ def submit_review():
 
 @app.route('/review', methods=['PUT'])
 def update_review():
+    """
+    Update an existing review.
+
+    :param review_id: The ID of the review to be updated
+    :type review_id: int
+    :param rating: (Optional) The updated rating
+    :type rating: int, optional
+    :param comment: (Optional) The updated comment
+    :type comment: str, optional
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if review is not found, 500 for server errors
+    :return: JSON representation of the updated review
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -92,6 +119,15 @@ def update_review():
 
 @app.route('/review', methods=['DELETE'])
 def delete_review():
+    """
+    Delete an existing review.
+
+    :param review_id: The ID of the review to be deleted
+    :type review_id: int
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if review is not found, 500 for server errors
+    :return: Success message confirming the deletion
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -144,6 +180,15 @@ def delete_review():
 
 @app.route('/product-reviews:<inventory_id>', methods=['GET'])
 def get_product_reviews(inventory_id):
+    """
+    Get all reviews for a specific product.
+
+    :param inventory_id: The ID of the inventory item
+    :type inventory_id: int
+    :raises werkzeug.exceptions.HTTPException: 500 for server errors
+    :return: JSON representation of all reviews for the product
+    :rtype: flask.Response
+    """
     try:
         reviews = Review.query.filter_by(inventory_id=inventory_id).all()
         return jsonify(reviews_schema.dump(reviews)), 200
@@ -153,6 +198,16 @@ def get_product_reviews(inventory_id):
 
 @app.route('/customer-reviews', methods=['GET'])
 def get_customer_reviews():
+    """
+    Get all reviews submitted by a specific customer.
+
+    :param customer_id: The ID of the customer
+    :type customer_id: int
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 500 for server errors
+    :return: JSON representation of all reviews submitted by the customer
+    :rtype: flask.Response
+    """
+
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -175,6 +230,18 @@ def get_customer_reviews():
 
 @app.route('/moderate-reviews', methods=['POST'])
 def moderate_reviews():
+    """
+    Moderate a review (flag or delete).
+
+    :param review_id: The ID of the review to be moderated
+    :type review_id: int
+    :param flag: The moderation flag (e.g., inappropriate, spam)
+    :type flag: str
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if review is not found, 500 for server errors
+    :return: JSON representation of the moderated review or success message for deletion
+    :rtype: flask.Response
+    """
+
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
@@ -214,6 +281,15 @@ def moderate_reviews():
 
 @app.route('/review-details', methods=['GET'])
 def get_review_details():
+    """
+    Retrieve details of a specific review.
+
+    :param review_id: The ID of the review
+    :type review_id: int
+    :raises werkzeug.exceptions.HTTPException: 400 for bad requests, 403 for unauthorized access, 404 if review is not found, 500 for server errors
+    :return: JSON representation of the review details
+    :rtype: flask.Response
+    """
     token = extract_auth_token(request)
     if not token:
         abort(403, "Something went wrong")
